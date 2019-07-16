@@ -2,6 +2,7 @@ import React from "react";
 import t from "tcomb-form-native";
 
 import formValidation from "../utils/Validation";
+import inputTemplate from "./templates/Input";
 
 export const RegisterStruct = t.struct({
   name: t.String,
@@ -13,28 +14,44 @@ export const RegisterStruct = t.struct({
 export const RegisterOptions = {
   fields: {
     name: {
-      label: "Nombre (*)",
-      placeholder: "Escribe tu nombre y apellido",
-      error: "Nombre inválido"
+      template: inputTemplate,
+      config: {
+        placeholder: "Escribe tu nombre y apellido",
+        iconName: "account-outline",
+        iconType: "material-community",
+        error: "Nombre inválido"
+      }
     },
     email: {
-      label: "Correo Electrónico (*)",
-      placeholder: "Escribe tu correo electrónico",
-      error: "Correo electrónico inválido"
+      template: inputTemplate,
+      config: {
+        placeholder: "Escribe tu correo electrónico",
+        iconName: "at",
+        iconType: "material-community",
+        error: "Correo electrónico inválido"
+      }
     },
     password: {
-      label: "Contraseña (*)",
-      placeholder: "Escribe tu contraseña",
-      error: "Contraseña inválida",
-      password: true,
-      secureTextEntry: true
+      template: inputTemplate,
+      config: {
+        placeholder: "Escribe tu contraseña",
+        iconName: "lock-outline",
+        iconType: "material-community",
+        error: "Contraseña inválida",
+        password: true,
+        secureTextEntry: true
+      }
     },
     passwordConfirmation: {
-      label: "Repetir contraseña (*)",
-      placeholder: "Repite tu contraseña",
-      error: "Las contraseñas no coinciden",
-      password: true,
-      secureTextEntry: true
+      template: inputTemplate,
+      config: {
+        placeholder: "Repite tu contraseña",
+        iconName: "lock-reset",
+        iconType: "material-community",
+        error: "Las contraseñas no coinciden",
+        password: true,
+        secureTextEntry: true
+      }
     }
   }
 };

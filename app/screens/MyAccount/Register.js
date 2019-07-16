@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, Text } from "react-native-elements";
 
 import t from "tcomb-form-native";
 
@@ -18,23 +18,31 @@ export default class Register extends Component {
         email: "",
         password: "",
         passwordConfirmation: ""
-      }
+      },
+      formErrorMessage: ""
     };
   }
 
   register = () => {
     const { password, passwordConfirmation } = this.state.formData;
 
+    console.log("Registrando con...", this.state.formData);
     if (password === passwordConfirmation) {
-      console.log("Registrando con...", this.state.formData);
       const validate = this.refs.registerForm.getValue();
       if (validate) {
+        this.setState({
+          formErrorMessage: ""
+        });
         console.log("Datos válidos");
       } else {
-        console.log("Datos inválidos");
+        this.setState({
+          formErrorMessage: "Datos inválidos"
+        });
       }
     } else {
-      console.log("Las contraseñas no coinciden");
+      this.setState({
+        formErrorMessage: "Las contraseñas no coinciden"
+      });
     }
   };
 
@@ -45,7 +53,7 @@ export default class Register extends Component {
   };
 
   render() {
-    const { registerOptions, registerStruct } = this.state;
+    const { registerOptions, registerStruct, formErrorMessage } = this.state;
     return (
       <View style={styles.viewBody}>
         <Form
@@ -55,7 +63,12 @@ export default class Register extends Component {
           value={this.state.formData}
           onChange={values => this.onChangeFormRegister(values)}
         />
-        <Button title="Unirse" onPress={() => this.register()} />
+        <Button
+          buttonStyle={styles.buttonRegisterContainer}
+          title="Unirse"
+          onPress={() => this.register()}
+        />
+        <Text style={styles.formErroMessage}>{formErrorMessage}</Text>
       </View>
     );
   }
@@ -66,5 +79,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginHorizontal: 40
+  },
+  buttonRegisterContainer: {
+    backgroundColor: "#00a680",
+    marginHorizontal: 10
+  },
+  formErroMessage: {
+    color: "#ff0000",
+    textAlign: "center",
+    marginTop: 30
   }
 });
