@@ -54,7 +54,7 @@ export default class Register extends Component {
             console.log(error);
             console.log(`Error creando la cuenta: ${error}`);
             this.refs.toast.show(
-              "!Ese correo elctrónico, ya está en uso!",
+              "!El correo electrónico, ya está en uso!",
               2000
             );
           });
