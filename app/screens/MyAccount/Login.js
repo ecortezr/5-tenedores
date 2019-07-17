@@ -67,34 +67,37 @@ export default class Login extends Component {
     return (
       <View style={styles.viewBody}>
         <Image
-          source={require("../../../assets/img/ /assets/img/5-tenedores-letras-icono-logo.png")}
+          source={require("../../../assets/img/5-tenedores-letras-icono-logo.png")}
+          containerStyle={styles.containerLogo}
           style={styles.logo}
           PlaceholderContent={<ActivityIndicator />}
           resizeMode="contain"
         />
-        <Form
-          ref="loginForm"
-          type={loginStruct}
-          options={loginOptions}
-          value={this.state.formData}
-          onChange={values => this.onChangeFormLogin(values)}
-        />
-        <Button
-          buttonStyle={styles.buttonLoginContainer}
-          title="Acceder"
-          onPress={() => this.login()}
-        />
-        <Text style={styles.formErroMessage}>{formErrorMessage}</Text>
-        <Toast
-          ref="toast"
-          style={{ backgroundColor: "red" }}
-          position="top"
-          positionValue={50}
-          fadeInDuration={750}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{ color: "#fff" }}
-        />
+        <View style={styles.viewForm}>
+          <Form
+            ref="loginForm"
+            type={loginStruct}
+            options={loginOptions}
+            value={this.state.formData}
+            onChange={values => this.onChangeFormLogin(values)}
+          />
+          <Button
+            buttonStyle={styles.buttonLoginContainer}
+            title="Acceder"
+            onPress={() => this.login()}
+          />
+          <Text style={styles.formErroMessage}>{formErrorMessage}</Text>
+          <Toast
+            ref="toast"
+            style={{ backgroundColor: "red" }}
+            position="top"
+            positionValue={50}
+            fadeInDuration={750}
+            fadeOutDuration={1000}
+            opacity={0.8}
+            textStyle={{ color: "#fff" }}
+          />
+        </View>
       </View>
     );
   }
@@ -103,18 +106,24 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   viewBody: {
     flex: 1,
-    alignItems: "center",
     marginHorizontal: 40,
     marginTop: 40
   },
+  viewForm: {
+    marginTop: 50
+  },
   buttonLoginContainer: {
     backgroundColor: "#00a680",
+    marginTop: 20,
     marginHorizontal: 10
   },
   formErroMessage: {
     color: "#ff0000",
     textAlign: "center",
     marginTop: 30
+  },
+  logo: {
+    alignItems: "center"
   },
   logo: {
     width: 300,
