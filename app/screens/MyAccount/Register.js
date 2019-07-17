@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-elements";
-
+import Toast, { DURATION } from "react-native-easy-toast";
 import t from "tcomb-form-native";
 
 const Form = t.form.Form;
@@ -41,10 +41,22 @@ export default class Register extends Component {
           .createUserWithEmailAndPassword(validate.email, validate.password)
           .then(resolve => {
             console.log("Cuenta creada! Resolve: ", resolve);
+            this.refs.toast.show(
+              "!Felicidades! Registro exitoso. Ahora, acceda con sus credenciales",
+              150,
+              () => {
+                this.props.navigation.navigate("MyAccount");
+                // this.props.navigation.goBack();
+              }
+            );
           })
           .catch(error => {
             console.log(error);
             console.log(`Error creando la cuenta: ${error}`);
+            this.refs.toast.show(
+              "!Ese correo elctrónico, ya está en uso!",
+              2000
+            );
           });
       } else {
         this.setState({
@@ -81,6 +93,16 @@ export default class Register extends Component {
           onPress={() => this.register()}
         />
         <Text style={styles.formErroMessage}>{formErrorMessage}</Text>
+        <Toast
+          ref="toast"
+          style={{ backgroundColor: "red" }}
+          position="top"
+          positionValue={50}
+          fadeInDuration={750}
+          fadeOutDuration={1000}
+          opacity={0.8}
+          textStyle={{ color: "#fff" }}
+        />
       </View>
     );
   }
