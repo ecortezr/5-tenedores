@@ -37,8 +37,8 @@ export default class Login extends Component {
         .then(resolve => {
           console.log("Acceso correcto: ", resolve);
           this.refs.toast.show(`!Bienvenido, ${validate.email}!`, 150, () => {
-            this.props.navigation.navigate("MyAccount");
-            // this.props.navigation.goBack();
+            // this.props.navigation.navigate("MyAccount");
+            this.props.navigation.goBack();
           });
         })
         .catch(error => {
