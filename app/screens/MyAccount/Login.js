@@ -109,6 +109,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     marginTop: 40
   },
+  containerLogo: {
+    alignItems: "center"
+  },
   viewForm: {
     marginTop: 50
   },
@@ -121,9 +124,6 @@ const styles = StyleSheet.create({
     color: "#ff0000",
     textAlign: "center",
     marginTop: 30
-  },
-  containerLogo: {
-    alignItems: "center"
   },
   logo: {
     width: 300,
