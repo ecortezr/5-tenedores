@@ -19,6 +19,10 @@ export default class MyAccount extends Component {
         this.setState({
           login: true
         });
+      } else {
+        this.setState({
+          login: false
+        });
       }
     });
   }
@@ -28,12 +32,17 @@ export default class MyAccount extends Component {
     this.props.navigation.navigate(nameScreen);
   };
 
+  logout = async () => {
+    await firebase.auth().signOut();
+  };
+
   render() {
     const { login } = this.state;
     if (login) {
       return (
         <View style={styles.viewBody}>
           <Text>Bienvenido...</Text>
+          <Button title="Cerrar Sesión" onPress={() => this.logout()} />
         </View>
       );
     } else {
