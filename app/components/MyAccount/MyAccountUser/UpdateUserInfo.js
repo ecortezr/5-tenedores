@@ -3,9 +3,7 @@ import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { Avatar } from "react-native-elements";
 import * as firebase from "firebase";
 
-import UpdateUserInfo from "./UpdateUserInfo";
-
-export default class UserInfo extends Component {
+export default class UpdateUserInfo extends Component {
   constructor(state) {
     super(state);
 
@@ -35,35 +33,19 @@ export default class UserInfo extends Component {
     const avatar =
       photoURL || "https://api.adorable.io/avatars/285/abott@adorable.png";
     return (
-      <View>
-        <View style={styles.viewUserInfo}>
-          <Avatar
-            rounded
-            size="large"
-            source={{
-              uri: avatar
-            }}
-            containerStyle={styles.userInfoAvatar}
-          />
-          <Text style={styles.displayName}>{displayName}</Text>
-          <Text>{email}</Text>
-        </View>
-        <UpdateUserInfo />
+      <View style={styles.updateUserInfo}>
+        <Text>Editando...</Text>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  viewUserInfo: {
-    // flex: 1,
+  updateUserInfo: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f2f2f2",
-    paddingVertical: 30
-    // justifyContent: "center",
-    // paddingHorizontal: 30
+    marginVertical: 30
   },
   userInfoAvatar: {
     marginRight: 20

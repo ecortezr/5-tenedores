@@ -24,23 +24,6 @@ export default class MyAccountUser extends Component {
 }
 
 const styles = StyleSheet.create({
-  viewBody: {
-    flex: 1,
-    alignItems: "center",
-    paddingHorizontal: 30
-  },
-  image: {
-    height: 300,
-    marginBottom: 40
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 19,
-    marginBottom: 10
-  },
-  description: {
-    textAlign: "center"
-  },
   btnViewProfile: {
     width: "100%",
     backgroundColor: "#00a680",
