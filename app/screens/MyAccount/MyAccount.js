@@ -47,7 +47,7 @@ export default class MyAccount extends Component {
         </View>
       );
     } else {
-      return <MyAccountGuest />;
+      return <MyAccountGuest goToScreen={this.goToScreen} />; // Sistema de burbujeo (le envío la función, para que la pueda ejecutar dentro del componente)
       /* return (
         <View style={styles.viewBody}>
           <Text>MyAccount Screen...</Text>
