@@ -7,8 +7,16 @@ import Menu from "./menuConfig";
 import OverlayOneInput from "../../Elements/OverlayOneInput";
 
 export default class UpdateUserInfo extends Component {
-  constructor() {
-    super();
+  /**
+   * En el adiestramiento, proponen que se reciba state. No entiendo por qué, ya que lo que se le envía son props
+   */
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      ...props,
+      overlayComponent: null
+    };
 
     /* this.state = {
       menuItems: [

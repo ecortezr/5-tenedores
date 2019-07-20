@@ -20,14 +20,27 @@ export default class UserInfo extends Component {
 
   getUserInfo = async () => {
     const user = await firebase.auth().currentUser;
-    console.log("user: ", user);
+    // console.log("user: ", user);
     user.providerData.forEach(userInfo => {
-      console.log("userInfo: ", userInfo);
       this.setState({
         userInfo
       });
     });
-    console.log("state: ", this.state.userInfo);
+  };
+
+  updateUserDisplayName = newDisplayName => {
+    console.log("newDisplayName: ", newDisplayName);
+  };
+
+  returnUpdateUserInfoComponent = userInfoData => {
+    if (userInfoData.hasOwnProperty("uid")) {
+      return (
+        <UpdateUserInfo
+          userInfo={this.state.userInfo}
+          updateUserDisplayName={this.updateUserDisplayName}
+        />
+      );
+    }
   };
 
   render() {
@@ -48,7 +61,11 @@ export default class UserInfo extends Component {
           <Text style={styles.displayName}>{displayName}</Text>
           <Text>{email}</Text>
         </View>
-        <UpdateUserInfo />
+        {this.returnUpdateUserInfoComponent(this.state.userInfo)}
+        {/* <UpdateUserInfo
+          userInfo={this.state.userInfo}
+          updateUserDisplayName={this.updateUserDisplayName}
+        /> */}
       </View>
     );
   }
