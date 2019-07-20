@@ -3,22 +3,15 @@ import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { ListItem } from "react-native-elements";
 // import * as firebase from "firebase";
 
-import Menu from "./menuConfig";
 import OverlayOneInput from "../../Elements/OverlayOneInput";
 
 export default class UpdateUserInfo extends Component {
-  /**
-   * En el adiestramiento, proponen que se reciba state. No entiendo por qué, ya que lo que se le envía son props
-   */
   constructor(props) {
     super(props);
 
     this.state = {
       ...props,
-      overlayComponent: null
-    };
-
-    /* this.state = {
+      overlayComponent: null,
       menuItems: [
         {
           title: "Cambiar nombre de usuario",
@@ -27,7 +20,12 @@ export default class UpdateUserInfo extends Component {
           iconColorRight: "#ccc",
           iconNameLeft: "account-circle",
           iconColorLeft: "#ccc",
-          onPress: () => console.log("Click en cambiar nombre de usuario")
+          onPress: () =>
+            this.openOverlay(
+              "Nombre de usuario",
+              this.updateUserDisplayName,
+              props.userInfo.displayName
+            )
         },
         {
           title: "Cambiar email",
@@ -48,17 +46,36 @@ export default class UpdateUserInfo extends Component {
           onPress: () => console.log("Click en cambiar contraseña")
         }
       ]
-    }; */
+    };
   }
+
+  updateUserDisplayName = async newDisplayName => {
+    this.state.updateUserDisplayName(newDisplayName);
+    this.setState({
+      overlayComponent: null
+    });
+  };
 
   componentDidMount = () => {};
 
+  openOverlay = (placeholder, updateFunction, inputValue) => {
+    this.setState({
+      overlayComponent: (
+        <OverlayOneInput
+          placeholder={placeholder}
+          updateFunction={updateFunction}
+          inputValue={inputValue}
+          isVisibleOverlay={true}
+        />
+      )
+    });
+  };
+
   render() {
-    // const { menuItems } = this.state;
+    const { menuItems, overlayComponent } = this.state;
     return (
       <View style={styles.updateUserInfo}>
-        {Menu.map((item, idx) => (
-          // <Text key={idx}>{item.title}</Text>
+        {menuItems.map((item, idx) => (
           <ListItem
             key={idx}
             title={item.title}
@@ -76,7 +93,7 @@ export default class UpdateUserInfo extends Component {
             containerStyle={styles.contentContainerStyle}
           />
         ))}
-        <OverlayOneInput />
+        {overlayComponent}
       </View>
     );
   }

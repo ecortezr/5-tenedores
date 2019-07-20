@@ -6,8 +6,8 @@ import * as firebase from "firebase";
 import UpdateUserInfo from "./UpdateUserInfo";
 
 export default class UserInfo extends Component {
-  constructor(state) {
-    super(state);
+  constructor(props) {
+    super(props);
 
     this.state = {
       userInfo: {}

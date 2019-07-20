@@ -5,22 +5,52 @@ import { Overlay, Input, Button } from "react-native-elements";
 export default class OverlayOneInput extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      ...props
+    };
   }
+
+  onChangeInput = inputData => {
+    this.setState({
+      inputValue: inputData
+    });
+  };
+  update = () => {
+    const newValue = this.state.inputValue;
+    this.state.updateFunction(newValue);
+
+    // Cierra el Overlay
+    this.setState({
+      isVisibleOverlay: false
+    });
+  };
+
   render() {
+    const {
+      isVisibleOverlay,
+      placeholder,
+      inputValue,
+      updateFunction
+    } = this.state;
     return (
       <Overlay
-        isVisible={false}
+        isVisible={isVisibleOverlay}
         overlayBackgroundColor="transparent"
         overlayStyle={styles.overlayStyle}
       >
         <View style={styles.viewOverlay}>
           <Input
             style={styles.inputContainer}
-            placeholder="Texto..."
-            onChangeText={value => console.log(value)}
-            value=""
+            placeholder={placeholder}
+            onChangeText={value => this.onChangeInput(value)}
+            value={inputValue}
           />
-          <Button buttonStyle={styles.btnUpdate} title="Actualizar" />
+          <Button
+            buttonStyle={styles.btnUpdate}
+            title="Actualizar"
+            onPress={() => this.update()}
+          />
         </View>
       </Overlay>
     );
