@@ -1,56 +1,81 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { Avatar } from "react-native-elements";
-import * as firebase from "firebase";
+import { ListItem } from "react-native-elements";
+// import * as firebase from "firebase";
+
+import Menu from "./menuConfig";
 
 export default class UpdateUserInfo extends Component {
-  constructor(state) {
-    super(state);
+  constructor() {
+    super();
 
-    this.state = {
-      userInfo: {}
-    };
+    /* this.state = {
+      menuItems: [
+        {
+          title: "Cambiar nombre de usuario",
+          iconType: "material-community",
+          iconNameRight: "chevron-right",
+          iconColorRight: "#ccc",
+          iconNameLeft: "account-circle",
+          iconColorLeft: "#ccc",
+          onPress: () => console.log("Click en cambiar nombre de usuario")
+        },
+        {
+          title: "Cambiar email",
+          iconType: "material-community",
+          iconNameRight: "chevron-right",
+          iconColorRight: "#ccc",
+          iconNameLeft: "at",
+          iconColorLeft: "#ccc",
+          onPress: () => console.log("Click en cambiar email")
+        },
+        {
+          title: "Cambiar contraseña",
+          iconType: "material-community",
+          iconNameRight: "chevron-right",
+          iconColorRight: "#ccc",
+          iconNameLeft: "lock-reset",
+          iconColorLeft: "#ccc",
+          onPress: () => console.log("Click en cambiar contraseña")
+        }
+      ]
+    }; */
   }
 
-  componentDidMount = () => {
-    this.getUserInfo();
-  };
-
-  getUserInfo = async () => {
-    const user = await firebase.auth().currentUser;
-    console.log("user: ", user);
-    user.providerData.forEach(userInfo => {
-      console.log("userInfo: ", userInfo);
-      this.setState({
-        userInfo
-      });
-    });
-    console.log("state: ", this.state.userInfo);
-  };
+  componentDidMount = () => {};
 
   render() {
-    const { displayName, email, photoURL } = this.state.userInfo;
-    const avatar =
-      photoURL || "https://api.adorable.io/avatars/285/abott@adorable.png";
+    // const { menuItems } = this.state;
     return (
       <View style={styles.updateUserInfo}>
-        <Text>Editando...</Text>
+        {Menu.map((item, idx) => (
+          // <Text key={idx}>{item.title}</Text>
+          <ListItem
+            key={idx}
+            title={item.title}
+            leftIcon={{
+              type: item.iconType,
+              name: item.iconNameLeft,
+              color: item.iconColorLeft
+            }}
+            rightIcon={{
+              type: item.iconType,
+              name: item.iconNameRight,
+              color: item.iconColorRight
+            }}
+            onPress={item.onPress}
+            containerStyle={styles.contentContainerStyle}
+          />
+        ))}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  updateUserInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 30
-  },
-  userInfoAvatar: {
-    marginRight: 20
-  },
-  displayName: {
-    fontWeight: "bold"
+  updateUserInfo: {},
+  contentContainerStyle: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#e3e3d3"
   }
 });
