@@ -124,10 +124,17 @@ export default class Login extends Component {
             title="Acceder"
             onPress={() => this.login()}
           />
+          <Text style={styles.textRegister}>
+            ¿Aún no tienes una cuenta? Entonces,{" "}
+            <Text
+              style={styles.btnRegister}
+              onPress={() => this.props.navigation.navigate("Register")}
+            >
+              Regístrate
+            </Text>
+          </Text>
           <Text style={styles.formErroMessage}>{formErrorMessage}</Text>
-
           <Divider style={styles.divider} />
-
           <SocialIcon
             title="Iniciar sesión con Facebook"
             button
@@ -153,7 +160,7 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   viewBody: {
     flex: 1,
-    marginHorizontal: 40,
+    marginHorizontal: 30,
     marginTop: 40
   },
   containerLogo: {
@@ -170,7 +177,7 @@ const styles = StyleSheet.create({
   formErroMessage: {
     color: "#ff0000",
     textAlign: "center",
-    marginTop: 30
+    marginVertical: 20
   },
   logo: {
     width: 300,
@@ -179,5 +186,13 @@ const styles = StyleSheet.create({
   divider: {
     backgroundColor: "#00a680",
     marginBottom: 20
+  },
+  textRegister: {
+    marginHorizontal: 10,
+    marginTop: 15
+  },
+  btnRegister: {
+    color: "#00a680",
+    fontWeight: "bold"
   }
 });
