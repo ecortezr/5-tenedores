@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import * as firebase from "firebase";
-import MyUserAccount from "../../components/MyAccount/MyUserAccount";
+import MyAccountUser from "../../components/MyAccount/MyAccountUser";
 import MyAccountGuest from "../../components/MyAccount/MyAccountGuest";
 
 export default class MyAccount extends Component {
@@ -40,7 +40,7 @@ export default class MyAccount extends Component {
   render() {
     const { login } = this.state;
     if (login) {
-      return <MyUserAccount logout={this.logout} />; // Sistema de burbujeo (le envío la función, para que la pueda ejecutar dentro del componente)
+      return <MyAccountUser logout={this.logout} />; // Sistema de burbujeo (le envío la función, para que la pueda ejecutar dentro del componente)
       /* return <View style={styles.viewBody}>
           <Text>Bienvenido...</Text>
           <Button title="Cerrar Sesión" onPress={() => this.logout()} />

@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { Button, Image } from "react-native-elements";
 
-export default class MyUserAccount extends Component {
+import UserInfo from "./UserInfo";
+
+export default class MyAccountUser extends Component {
   constructor(props) {
     super(props);
   }
@@ -10,13 +12,7 @@ export default class MyUserAccount extends Component {
     const { logout } = this.props;
     return (
       <View style={styles.viewBody}>
-        <Image
-          source={require("../../../assets/img/image-my-account-guest-01.jpg")}
-          style={styles.image}
-          PlaceholderContent={<ActivityIndicator />}
-          resizeMode="contain"
-        />
-        <Text style={styles.description}>¡Bienvenido!</Text>
+        <UserInfo />
         <Button
           buttonStyle={styles.btnViewProfile}
           title="Cerrar Sesión"
@@ -31,7 +27,6 @@ const styles = StyleSheet.create({
   viewBody: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
     paddingHorizontal: 30
   },
   image: {
