@@ -4,6 +4,7 @@ import { ListItem } from "react-native-elements";
 // import * as firebase from "firebase";
 
 import Menu from "./menuConfig";
+import OverlayOneInput from "../../Elements/OverlayOneInput";
 
 export default class UpdateUserInfo extends Component {
   constructor() {
@@ -67,6 +68,7 @@ export default class UpdateUserInfo extends Component {
             containerStyle={styles.contentContainerStyle}
           />
         ))}
+        <OverlayOneInput />
       </View>
     );
   }
