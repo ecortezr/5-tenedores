@@ -1,36 +1,41 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { Avatar } from "react-native-elements";
-import * as firebase from "firebase";
+import React, { Component } from "react"
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
+import { Avatar } from "react-native-elements"
+import * as firebase from "firebase"
 
-import UpdateUserInfo from "./UpdateUserInfo";
+import UpdateUserInfo from "./UpdateUserInfo"
 
 export default class UserInfo extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       userInfo: {}
-    };
+    }
   }
 
   componentDidMount = () => {
-    this.getUserInfo();
-  };
+    this.getUserInfo()
+  }
 
   getUserInfo = async () => {
-    const user = await firebase.auth().currentUser;
+    const user = await firebase.auth().currentUser
     // console.log("user: ", user);
     user.providerData.forEach(userInfo => {
       this.setState({
         userInfo
-      });
-    });
-  };
+      })
+    })
+  }
 
-  updateUserDisplayName = newDisplayName => {
-    console.log("newDisplayName: ", newDisplayName);
-  };
+  updateUserDisplayName = async newDisplayName => {
+    console.log("newDisplayName: ", newDisplayName)
+    await firebase.auth().currentUser.updateProfile({
+      displayName: newDisplayName
+    })
+
+    this.getUserInfo()
+  }
 
   returnUpdateUserInfoComponent = userInfoData => {
     if (userInfoData.hasOwnProperty("uid")) {
@@ -39,14 +44,14 @@ export default class UserInfo extends Component {
           userInfo={this.state.userInfo}
           updateUserDisplayName={this.updateUserDisplayName}
         />
-      );
+      )
     }
-  };
+  }
 
   render() {
-    const { displayName, email, photoURL } = this.state.userInfo;
+    const { displayName, email, photoURL } = this.state.userInfo
     const avatar =
-      photoURL || "https://api.adorable.io/avatars/285/abott@adorable.png";
+      photoURL || "https://api.adorable.io/avatars/285/abott@adorable.png"
     return (
       <View>
         <View style={styles.viewUserInfo}>
@@ -58,8 +63,10 @@ export default class UserInfo extends Component {
             }}
             containerStyle={styles.userInfoAvatar}
           />
-          <Text style={styles.displayName}>{displayName}</Text>
-          <Text>{email}</Text>
+          <View>
+            <Text style={styles.displayName}>{displayName}</Text>
+            <Text>{email}</Text>
+          </View>
         </View>
         {this.returnUpdateUserInfoComponent(this.state.userInfo)}
         {/* <UpdateUserInfo
@@ -67,7 +74,7 @@ export default class UserInfo extends Component {
           updateUserDisplayName={this.updateUserDisplayName}
         /> */}
       </View>
-    );
+    )
   }
 }
 
@@ -88,4 +95,4 @@ const styles = StyleSheet.create({
   displayName: {
     fontWeight: "bold"
   }
-});
+})
