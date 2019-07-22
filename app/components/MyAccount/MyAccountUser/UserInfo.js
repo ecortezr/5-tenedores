@@ -102,17 +102,20 @@ export default class UserInfo extends Component {
       if (result.cancelled) {
         this.refs.toast.show("No se ha seleccionado ninguna imagen", 1500)
       } else {
-        // Se sube la imagen a firebase (storage)
-        const { uid } = this.state.userInfo
-        this.uploadImage(result.uri, uid)
+        // Sube la imagen
+        this.uploadImage(result.uri)
           .then(async resolve => {
+            console.log("Imagen subida: ", resolve)
+            const { uid } = this.state.userInfo
+            // La imagen que ha subido, la almacena en el storage de firebase
             const ref = firebase
               .storage()
               .ref()
-              .child("avatar/")
+              .child("avatar/" + uid)
             const uploaded = await ref.put(resolve)
-            console.log("uploaded: ", uploaded)
+            console.log("uploaded to firebase: ", uploaded)
 
+            // La recupera de firebase, a partir del uid único del usuario
             firebase
               .storage()
               .ref("avatar/" + uid)
@@ -123,14 +126,18 @@ export default class UserInfo extends Component {
                 })
 
                 this.getUserInfo()
+                this.refs.toast.show("Avatar actualizado, correctamente", 1500)
               })
               .catch(error => {
+                console.log(
+                  "Error recuperando el URL de la imagen subida: ",
+                  error
+                )
                 this.refs.toast.show(
                   "Ha ocurrido un error, al intentar recuperar el avatar, desde el servidor",
                   1500
                 )
               })
-            this.refs.toast.show("Avatar actualizado, correctamente", 1500)
           })
           .catch(error => {
             this.refs.toast.show(
@@ -142,9 +149,9 @@ export default class UserInfo extends Component {
     }
   }
 
-  uploadImage = async (uri, nameImage) => {
-    console.log(`uri: ${uri} nameImage: ${nameImage}`)
+  uploadImage = async uri => {
     // con un return fetch(uri) sería más que suficiente, pero expo tiene un bug
+    console.log("Subiendo la imagen en uploadImage")
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest()
       xhr.onerror = reject
