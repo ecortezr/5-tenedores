@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { Button, Image } from "react-native-elements";
+import React, { Component } from "react"
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
+import { Button, Image } from "react-native-elements"
 
-import UserInfo from "./UserInfo";
+import UserInfo from "./UserInfo"
 
 export default class MyAccountUser extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   render() {
-    const { logout } = this.props;
+    const { logout } = this.props
     return (
       <View style={styles.viewBody}>
         <UserInfo />
@@ -19,7 +19,7 @@ export default class MyAccountUser extends Component {
           onPress={() => logout()}
         />
       </View>
-    );
+    )
   }
 }
 
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#00a680",
     marginTop: 20
   }
-});
+})

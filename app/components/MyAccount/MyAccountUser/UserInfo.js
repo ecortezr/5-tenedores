@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
 import { Avatar } from "react-native-elements"
+import * as Permissions from "expo-permissions"
+import * as ImagePicker from "expo-image-picker"
 import Toast from "react-native-easy-toast"
 import * as firebase from "firebase"
 
@@ -48,7 +50,7 @@ export default class UserInfo extends Component {
     this.getUserInfo()
   }
 
-  updateUserEmail = async (newEmail, password) => {
+  updateUserEmail = (newEmail, password) => {
     console.log("newEmail: ", newEmail)
     console.log("password: ", password)
     this.reAuthenticate(password)
@@ -81,6 +83,30 @@ export default class UserInfo extends Component {
       })
   }
 
+  updateUserAvatar = async () => {
+    const resultPermissions = await Permissions.askAsync(
+      Permissions.CAMERA_ROLL
+    )
+    console.log("resultPermissions: ", resultPermissions)
+    if (resultPermissions.status === "denied") {
+      this.refs.toast.show(
+        "Debe concederle el permiso a la app, para poder acceder a su galería de imágenes",
+        1500
+      )
+    } else {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3]
+      })
+      console.log("result: ", result)
+      if (result.cancelled) {
+        this.refs.toast.show("No se ha seleccionado ninguna imagen", 1500)
+      } else {
+        // Se sube la imagen a firebase (storage)
+      }
+    }
+  }
+
   returnUpdateUserInfoComponent = userInfoData => {
     if (userInfoData.hasOwnProperty("uid")) {
       return (
@@ -107,6 +133,8 @@ export default class UserInfo extends Component {
               uri: avatar
             }}
             containerStyle={styles.userInfoAvatar}
+            showEditButton
+            onEditPress={() => this.updateUserAvatar()}
           />
           <View>
             <Text style={styles.displayName}>{displayName}</Text>
