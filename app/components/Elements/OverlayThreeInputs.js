@@ -31,7 +31,7 @@ export default class OverlayThreeInputs extends Component {
     const newValueOne = this.state.inputValueOne
     const newValueTwo = this.state.inputValueTwo
     const newValueThree = this.state.inputValueThree
-    this.state.updateFunction(newValueOne, newValueTwo, , newValueThree)
+    this.state.updateFunction(newValueOne, newValueTwo, newValueThree)
 
     // Cierra el Overlay
     this.setState({

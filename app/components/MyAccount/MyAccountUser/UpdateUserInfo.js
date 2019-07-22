@@ -1,10 +1,11 @@
 import React, { Component } from "react"
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
 import { ListItem } from "react-native-elements"
-// import * as firebase from "firebase";
+import Toast from "react-native-easy-toast"
 
 import OverlayOneInput from "../../Elements/OverlayOneInput"
 import OverlayTwoInputs from "../../Elements/OverlayTwoInputs"
+import OverlayThreeInputs from "../../Elements/OverlayThreeInputs"
 
 export default class UpdateUserInfo extends Component {
   constructor(props) {
@@ -50,7 +51,13 @@ export default class UpdateUserInfo extends Component {
           iconColorRight: "#ccc",
           iconNameLeft: "lock-reset",
           iconColorLeft: "#ccc",
-          onPress: () => console.log("Click en cambiar contraseña")
+          onPress: () =>
+            this.openOverlayThree(
+              "Contraseña actual",
+              "Nueva contraseña",
+              "Repita la contraseña",
+              this.updateUserPassword
+            )
         }
       ]
     }
@@ -69,6 +76,34 @@ export default class UpdateUserInfo extends Component {
     const oldEmail = this.state.userInfo.email
     if (newEmail && oldEmail !== newEmail) {
       this.state.updateUserEmail(newEmail, password)
+    }
+    this.setState({
+      overlayComponent: null
+    })
+  }
+
+  updateUserPassword = async (
+    oldPassword,
+    newPassword,
+    newPasswordConfirmation
+  ) => {
+    console.log(
+      "Passwords: ",
+      oldPassword,
+      newPassword,
+      newPasswordConfirmation
+    )
+    if (!oldPassword || !newPassword || !newPasswordConfirmation) {
+      this.refs.toast.show("Debe incluir todos los valores", 300)
+    } else if (newPassword !== newPasswordConfirmation) {
+      this.refs.toast.show("Las contraseñas no coinciden", 300)
+    } else if (oldPassword === newPassword) {
+      this.refs.toast.show(
+        "La nueva contraseña no puede ser la misma que la actual",
+        300
+      )
+    } else {
+      this.state.updateUserPassword(oldPassword, newPassword)
     }
     this.setState({
       overlayComponent: null
@@ -113,6 +148,29 @@ export default class UpdateUserInfo extends Component {
     })
   }
 
+  openOverlayThree = (
+    placeholderOne,
+    placeholderTwo,
+    placeholderThree,
+    updateFunction
+  ) => {
+    this.setState({
+      overlayComponent: (
+        <OverlayThreeInputs
+          placeholderOne={placeholderOne}
+          placeholderTwo={placeholderTwo}
+          placeholderThree={placeholderThree}
+          updateFunction={updateFunction}
+          inputValueOne=""
+          inputValueTwo=""
+          inputValueThree=""
+          havePassword={true}
+          isVisibleOverlay={true}
+        />
+      )
+    })
+  }
+
   render() {
     const { menuItems, overlayComponent } = this.state
     return (
@@ -136,6 +194,15 @@ export default class UpdateUserInfo extends Component {
           />
         ))}
         {overlayComponent}
+        <Toast
+          ref="toast"
+          position="center"
+          positionValue={0}
+          fadeInDuration={1000}
+          fadeOutDuration={1000}
+          opacity={0.8}
+          textStyle={{ color: "#fff" }}
+        />
       </View>
     )
   }

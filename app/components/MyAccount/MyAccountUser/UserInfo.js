@@ -83,6 +83,11 @@ export default class UserInfo extends Component {
       })
   }
 
+  updateUserPassword = async (currentPassword, newPassword) => {
+    console.log("currentPassword: ", currentPassword)
+    console.log("newPassword: ", newPassword)
+  }
+
   updateUserAvatar = async () => {
     const resultPermissions = await Permissions.askAsync(
       Permissions.CAMERA_ROLL
@@ -174,6 +179,7 @@ export default class UserInfo extends Component {
           userInfo={userInfoData}
           updateUserDisplayName={this.updateUserDisplayName}
           updateUserEmail={this.updateUserEmail}
+          updateUserPassword={this.updateUserPassword}
         />
       )
     }
