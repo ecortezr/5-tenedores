@@ -103,8 +103,61 @@ export default class UserInfo extends Component {
         this.refs.toast.show("No se ha seleccionado ninguna imagen", 1500)
       } else {
         // Se sube la imagen a firebase (storage)
+        const { uid } = this.state.userInfo
+        this.uploadImage(result.uri, uid)
+          .then(async resolve => {
+            const ref = firebase
+              .storage()
+              .ref()
+              .child("avatar/")
+            const uploaded = await ref.put(resolve)
+            console.log("uploaded: ", uploaded)
+
+            firebase
+              .storage()
+              .ref("avatar/" + uid)
+              .getDownloadURL()
+              .then(async url => {
+                await firebase.auth().currentUser.updateProfile({
+                  photoURL: url
+                })
+
+                this.getUserInfo()
+              })
+              .catch(error => {
+                this.refs.toast.show(
+                  "Ha ocurrido un error, al intentar recuperar el avatar, desde el servidor",
+                  1500
+                )
+              })
+            this.refs.toast.show("Avatar actualizado, correctamente", 1500)
+          })
+          .catch(error => {
+            this.refs.toast.show(
+              "Error subiendo la imagen al servidor. Inténtelo luego",
+              1500
+            )
+          })
       }
     }
+  }
+
+  uploadImage = async (uri, nameImage) => {
+    console.log(`uri: ${uri} nameImage: ${nameImage}`)
+    // con un return fetch(uri) sería más que suficiente, pero expo tiene un bug
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest()
+      xhr.onerror = reject
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          resolve(xhr.response)
+        }
+      }
+
+      xhr.open("GET", uri)
+      xhr.responseType = "blob"
+      xhr.send()
+    })
   }
 
   returnUpdateUserInfoComponent = userInfoData => {
