@@ -4,6 +4,7 @@ import { ListItem } from "react-native-elements"
 // import * as firebase from "firebase";
 
 import OverlayOneInput from "../../Elements/OverlayOneInput"
+import OverlayTwoInputs from "../../Elements/OverlayTwoInputs"
 
 export default class UpdateUserInfo extends Component {
   constructor(props) {
@@ -34,7 +35,13 @@ export default class UpdateUserInfo extends Component {
           iconColorRight: "#ccc",
           iconNameLeft: "at",
           iconColorLeft: "#ccc",
-          onPress: () => console.log("Click en cambiar email")
+          onPress: () =>
+            this.openOverlayTwo(
+              "Nuevo email",
+              "Contraseña",
+              this.updateUserEmail,
+              props.userInfo.email
+            )
         },
         {
           title: "Cambiar contraseña",
@@ -58,6 +65,16 @@ export default class UpdateUserInfo extends Component {
     })
   }
 
+  updateUserEmail = async (newEmail, password) => {
+    const oldEmail = this.state.userInfo.email
+    if (newEmail && oldEmail !== newEmail) {
+      this.state.updateUserEmail(newEmail, password)
+    }
+    this.setState({
+      overlayComponent: null
+    })
+  }
+
   componentDidMount = () => {}
 
   openOverlay = (placeholder, updateFunction, inputValue) => {
@@ -67,6 +84,26 @@ export default class UpdateUserInfo extends Component {
           placeholder={placeholder}
           updateFunction={updateFunction}
           inputValue={inputValue}
+          isVisibleOverlay={true}
+        />
+      )
+    })
+  }
+
+  openOverlayTwo = (
+    placeholderOne,
+    placeholderTwo,
+    updateFunction,
+    inputValue
+  ) => {
+    this.setState({
+      overlayComponent: (
+        <OverlayTwoInputs
+          placeholderOne={placeholderOne}
+          placeholderTwo={placeholderTwo}
+          updateFunction={updateFunction}
+          inputValueOne={inputValue}
+          inputValueTwo=""
           isVisibleOverlay={true}
         />
       )

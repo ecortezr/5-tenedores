@@ -37,12 +37,23 @@ export default class UserInfo extends Component {
     this.getUserInfo()
   }
 
+  updateUserEmail = async (newEmail, password) => {
+    console.log("newEmail: ", newEmail)
+    console.log("password: ", password)
+    /* await firebase.auth().currentUser.updateProfile({
+      displayName: newEmail
+    })
+
+    this.getUserInfo() */
+  }
+
   returnUpdateUserInfoComponent = userInfoData => {
     if (userInfoData.hasOwnProperty("uid")) {
       return (
         <UpdateUserInfo
           userInfo={this.state.userInfo}
           updateUserDisplayName={this.updateUserDisplayName}
+          updateUserEmail={this.updateUserEmail}
         />
       )
     }

@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { StyleSheet, View } from "react-native"
 import { Overlay, Input, Button, Icon } from "react-native-elements"
 
-export default class OverlayTwoInput extends Component {
+export default class OverlayTwoInputs extends Component {
   constructor(props) {
     super(props)
 
@@ -37,7 +37,7 @@ export default class OverlayTwoInput extends Component {
     this.setState({
       isVisibleOverlay: false
     })
-    this.state.updateFunction(null)
+    this.state.updateFunction(null, null)
   }
 
   render() {
