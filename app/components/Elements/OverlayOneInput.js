@@ -1,30 +1,37 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Overlay, Input, Button } from "react-native-elements";
+import React, { Component } from "react"
+import { StyleSheet, View } from "react-native"
+import { Overlay, Input, Button, Icon } from "react-native-elements"
 
 export default class OverlayOneInput extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       ...props
-    };
+    }
   }
 
   onChangeInput = inputData => {
     this.setState({
       inputValue: inputData
-    });
-  };
+    })
+  }
   update = () => {
-    const newValue = this.state.inputValue;
-    this.state.updateFunction(newValue);
+    const newValue = this.state.inputValue
+    this.state.updateFunction(newValue)
 
     // Cierra el Overlay
     this.setState({
       isVisibleOverlay: false
-    });
-  };
+    })
+  }
+
+  close = () => {
+    this.setState({
+      isVisibleOverlay: false
+    })
+    this.state.updateFunction(null)
+  }
 
   render() {
     const {
@@ -32,7 +39,7 @@ export default class OverlayOneInput extends Component {
       placeholder,
       inputValue,
       updateFunction
-    } = this.state;
+    } = this.state
     return (
       <Overlay
         isVisible={isVisibleOverlay}
@@ -51,9 +58,16 @@ export default class OverlayOneInput extends Component {
             title="Actualizar"
             onPress={() => this.update()}
           />
+          <Icon
+            containerStyle={styles.containerIconClose}
+            type="material-community"
+            name="close-circle-outline"
+            color="#f00"
+            onPress={() => this.close()}
+          />
         </View>
       </Overlay>
-    );
+    )
   }
 }
 
@@ -76,5 +90,11 @@ const styles = StyleSheet.create({
   btnUpdate: {
     backgroundColor: "#00a680",
     marginTop: 20
+  },
+  containerIconClose: {
+    position: "absolute",
+    right: 2,
+    top: 2,
+    backgroundColor: "#fff"
   }
-});
+})

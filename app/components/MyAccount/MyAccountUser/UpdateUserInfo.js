@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { ListItem } from "react-native-elements";
+import React, { Component } from "react"
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
+import { ListItem } from "react-native-elements"
 // import * as firebase from "firebase";
 
-import OverlayOneInput from "../../Elements/OverlayOneInput";
+import OverlayOneInput from "../../Elements/OverlayOneInput"
 
 export default class UpdateUserInfo extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       ...props,
@@ -46,17 +46,19 @@ export default class UpdateUserInfo extends Component {
           onPress: () => console.log("Click en cambiar contraseña")
         }
       ]
-    };
+    }
   }
 
   updateUserDisplayName = async newDisplayName => {
-    this.state.updateUserDisplayName(newDisplayName);
+    if (newDisplayName) {
+      this.state.updateUserDisplayName(newDisplayName)
+    }
     this.setState({
       overlayComponent: null
-    });
-  };
+    })
+  }
 
-  componentDidMount = () => {};
+  componentDidMount = () => {}
 
   openOverlay = (placeholder, updateFunction, inputValue) => {
     this.setState({
@@ -68,11 +70,11 @@ export default class UpdateUserInfo extends Component {
           isVisibleOverlay={true}
         />
       )
-    });
-  };
+    })
+  }
 
   render() {
-    const { menuItems, overlayComponent } = this.state;
+    const { menuItems, overlayComponent } = this.state
     return (
       <View style={styles.updateUserInfo}>
         {menuItems.map((item, idx) => (
@@ -95,7 +97,7 @@ export default class UpdateUserInfo extends Component {
         ))}
         {overlayComponent}
       </View>
-    );
+    )
   }
 }
 
@@ -105,4 +107,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#e3e3d3"
   }
-});
+})
