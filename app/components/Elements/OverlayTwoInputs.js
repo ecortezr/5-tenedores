@@ -47,7 +47,7 @@ export default class OverlayTwoInputs extends Component {
       placeholderTwo,
       inputValueOne,
       inputValueTwo,
-      updateFunction
+      havePassword
     } = this.state
     return (
       <Overlay
@@ -67,6 +67,8 @@ export default class OverlayTwoInputs extends Component {
             placeholder={placeholderTwo}
             onChangeText={value => this.onChangeInputTwo(value)}
             value={inputValueTwo}
+            password={havePassword}
+            secureTextEntry={havePassword}
           />
           <Button
             buttonStyle={styles.btnUpdate}

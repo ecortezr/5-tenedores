@@ -75,7 +75,9 @@ export default class UpdateUserInfo extends Component {
     })
   }
 
-  componentDidMount = () => {}
+  componentDidMount = () => {
+    // console.log("state en componentDidMount: ", this.state)
+  }
 
   openOverlay = (placeholder, updateFunction, inputValue) => {
     this.setState({
@@ -104,6 +106,7 @@ export default class UpdateUserInfo extends Component {
           updateFunction={updateFunction}
           inputValueOne={inputValue}
           inputValueTwo=""
+          havePassword={true}
           isVisibleOverlay={true}
         />
       )
