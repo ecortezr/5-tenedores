@@ -86,6 +86,32 @@ export default class UserInfo extends Component {
   updateUserPassword = async (currentPassword, newPassword) => {
     console.log("currentPassword: ", currentPassword)
     console.log("newPassword: ", newPassword)
+    this.reAuthenticate(currentPassword)
+      .then(() => {
+        firebase
+          .auth()
+          .currentUser.updatePassword(newPassword)
+          .then(() => {
+            this.refs.toast.show(
+              "La contraseña ha sido cambiada, satisfactoriamente. Acceda, nuevamente",
+              1500,
+              () => {
+                firebase.auth().signOut()
+              }
+            )
+          })
+          .catch(error => {
+            console.log("Error intentando cambiar el password")
+            this.refs.toast.show(
+              "Ocurrió un error intentando cambiar la contraseña. Inténtelo más tarde",
+              1500
+            )
+          })
+      })
+      .catch(error => {
+        console.log("Password incorrecto")
+        this.refs.toast.show("La contraseña actual, es incorrecta", 1500)
+      })
   }
 
   updateUserAvatar = async () => {
