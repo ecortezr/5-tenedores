@@ -4,7 +4,8 @@ import {
   View,
   Text,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity
 } from "react-native";
 import { Image } from "react-native-elements";
 import ActionButton from "react-native-action-button";
@@ -89,35 +90,41 @@ export default class Restaurants extends Component {
     }
   };
 
-  renderRow = restaurants => {
-    console.log("restaurants.item: ", restaurants.item);
+  restaurantDetails = restaurant => {
+    console.log("restaurant: ", restaurant);
+  };
+
+  renderRow = restaurant => {
     const {
+      id,
       name,
       city,
       address,
       description,
       image,
       createdAt
-    } = restaurants.item;
+    } = restaurant.item;
     return (
-      <View style={styles.viewRestaurant}>
-        <View style={styles.viewImageRestaurant}>
-          <Image
-            resizeMode="cover"
-            source={{ uri: image }}
-            style={styles.imageRestaurant}
-          />
+      <TouchableOpacity onPress={() => this.restaurantDetails(restaurant)}>
+        <View style={styles.viewRestaurant}>
+          <View style={styles.viewImageRestaurant}>
+            <Image
+              resizeMode="cover"
+              source={{ uri: image }}
+              style={styles.imageRestaurant}
+            />
+          </View>
+          <View>
+            <Text style={styles.restaurantName}>{name}</Text>
+            <Text style={styles.restaurantLocation}>
+              {city}, {address}
+            </Text>
+            <Text style={styles.restaurantDescription}>
+              {description.substr(0, 60)}...
+            </Text>
+          </View>
         </View>
-        <View>
-          <Text style={styles.restaurantName}>{name}</Text>
-          <Text style={styles.restaurantLocation}>
-            {city}, {address}
-          </Text>
-          <Text style={styles.restaurantDescription}>
-            {description.substr(0, 60)}...
-          </Text>
-        </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
