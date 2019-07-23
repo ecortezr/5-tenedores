@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { Button, Image } from "react-native-elements";
+import React, { Component } from "react"
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
+import { Button, Image } from "react-native-elements"
 
 export default class MyAccountGuest extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   render() {
-    const { goToScreen } = this.props;
+    const { goToScreen } = this.props
     return (
       <View style={styles.viewBody}>
         <Image
@@ -28,7 +28,7 @@ export default class MyAccountGuest extends Component {
           onPress={() => goToScreen("Login")}
         />
       </View>
-    );
+    )
   }
 }
 
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#00a680",
     marginTop: 20
   }
-});
+})

@@ -14,7 +14,8 @@ export default class MyAccountUser extends Component {
       <View style={styles.viewBody}>
         <UserInfo />
         <Button
-          buttonStyle={styles.btnViewProfile}
+          buttonStyle={styles.btnCloseSession}
+          titleStyle={styles.btnCloseSessionText}
           title="Cerrar Sesión"
           onPress={() => logout()}
         />
@@ -24,9 +25,19 @@ export default class MyAccountUser extends Component {
 }
 
 const styles = StyleSheet.create({
-  btnViewProfile: {
-    width: "100%",
-    backgroundColor: "#00a680",
-    marginTop: 20
+  viewBody: {
+    backgroundColor: "#f2f2f2",
+    height: "100%"
+  },
+  btnCloseSession: {
+    borderRadius: 0,
+    backgroundColor: "#fff",
+    marginTop: 30,
+    borderWidth: 1,
+    borderColor: "#e3e3e3",
+    paddingVertical: 10
+  },
+  btnCloseSessionText: {
+    color: "#00a680"
   }
 })
