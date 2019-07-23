@@ -91,7 +91,9 @@ export default class Restaurants extends Component {
   };
 
   restaurantDetails = restaurant => {
-    console.log("restaurant: ", restaurant);
+    this.props.navigation.navigate("Restaurant", {
+      restaurant
+    });
   };
 
   handleLoadMore = async () => {

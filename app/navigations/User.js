@@ -1,23 +1,24 @@
-import React from "react"
-import { Icon } from "react-native-elements"
+import React from "react";
+import { Icon } from "react-native-elements";
 import {
   createStackNavigator,
   createAppContainer,
   createBottomTabNavigator
-} from "react-navigation"
+} from "react-navigation";
 
 // Screens
-import Top5Screen from "../screens/Top5"
-import SearchScreen from "../screens/Search"
+import Top5Screen from "../screens/Top5";
+import SearchScreen from "../screens/Search";
 
 // MyAccount screens
-import MyAccountScreen from "../screens/MyAccount/MyAccount"
-import RegisterScreen from "../screens/MyAccount/Register"
-import LoginScreen from "../screens/MyAccount/Login"
+import MyAccountScreen from "../screens/MyAccount/MyAccount";
+import RegisterScreen from "../screens/MyAccount/Register";
+import LoginScreen from "../screens/MyAccount/Login";
 
 // Screens
-import RestaurantsScreen from "../screens/Restaurants/Restaurants"
-import AddRestaurantScreen from "../screens/Restaurants/AddRestaurant"
+import RestaurantsScreen from "../screens/Restaurants/Restaurants";
+import AddRestaurantScreen from "../screens/Restaurants/AddRestaurant";
+import RestaurantScreen from "../screens/Restaurants/Restaurant";
 
 const restaurantsScreenStack = createStackNavigator({
   Restaurants: {
@@ -31,8 +32,17 @@ const restaurantsScreenStack = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Agregar Restaurant"
     })
+  },
+  Restaurant: {
+    screen: RestaurantScreen,
+    navigationOptions: ({ navigation }) => {
+      const item = navigation.state.params.restaurant.item;
+      return {
+        title: item.name
+      };
+    }
   }
-})
+});
 
 const top5ScreenStack = createStackNavigator({
   Top5: {
@@ -41,7 +51,7 @@ const top5ScreenStack = createStackNavigator({
       title: "Top 5 de Restaurantes"
     })
   }
-})
+});
 
 const searchScreenStack = createStackNavigator({
   Search: {
@@ -50,7 +60,7 @@ const searchScreenStack = createStackNavigator({
       title: "Buscar"
     })
   }
-})
+});
 
 const myAccountScreenStack = createStackNavigator({
   MyAccount: {
@@ -71,7 +81,7 @@ const myAccountScreenStack = createStackNavigator({
       title: "Login"
     })
   }
-})
+});
 
 const RootStack = createBottomTabNavigator(
   {
@@ -140,6 +150,6 @@ const RootStack = createBottomTabNavigator(
       activeTintColor: "#00a680"
     }
   }
-)
+);
 
-export default createAppContainer(RootStack)
+export default createAppContainer(RootStack);
