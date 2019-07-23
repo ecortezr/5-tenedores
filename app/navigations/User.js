@@ -1,19 +1,19 @@
-import React from "react";
-import { Icon } from "react-native-elements";
+import React from "react"
+import { Icon } from "react-native-elements"
 import {
   createStackNavigator,
   createAppContainer,
   createBottomTabNavigator
-} from "react-navigation";
+} from "react-navigation"
 
 // Screens
-import HomeScreen from "../screens/Home";
-import Top5Screen from "../screens/Top5";
-import SearchScreen from "../screens/Search";
+import HomeScreen from "../screens/Home"
+import Top5Screen from "../screens/Top5"
+import SearchScreen from "../screens/Search"
 // MyAccount screens
-import MyAccountScreen from "../screens/MyAccount/MyAccount";
-import RegisterScreen from "../screens/MyAccount/Register";
-import LoginScreen from "../screens/MyAccount/Login";
+import MyAccountScreen from "../screens/MyAccount/MyAccount"
+import RegisterScreen from "../screens/MyAccount/Register"
+import LoginScreen from "../screens/MyAccount/Login"
 
 const homeScreenStack = createStackNavigator({
   Home: {
@@ -22,7 +22,7 @@ const homeScreenStack = createStackNavigator({
       title: "Home"
     })
   }
-});
+})
 
 const top5ScreenStack = createStackNavigator({
   Top5: {
@@ -31,7 +31,7 @@ const top5ScreenStack = createStackNavigator({
       title: "Top 5 de Restaurantes"
     })
   }
-});
+})
 
 const searchScreenStack = createStackNavigator({
   Search: {
@@ -40,7 +40,7 @@ const searchScreenStack = createStackNavigator({
       title: "Buscar"
     })
   }
-});
+})
 
 const myAccountScreenStack = createStackNavigator({
   MyAccount: {
@@ -61,7 +61,7 @@ const myAccountScreenStack = createStackNavigator({
       title: "Login"
     })
   }
-});
+})
 
 const RootStack = createBottomTabNavigator(
   {
@@ -123,13 +123,13 @@ const RootStack = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "MyAccount", // Opcional
+    initialRouteName: "Home", // Opcional
     order: ["Home", "Top5", "Search", "MyAccount"], // Opcional
     tabBarOptions: {
       inactiveTintColor: "#646464",
       activeTintColor: "#00a680"
     }
   }
-);
+)
 
-export default createAppContainer(RootStack);
+export default createAppContainer(RootStack)
