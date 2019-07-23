@@ -36,12 +36,10 @@ export const AddRestaurantOptions = {
         iconName: "map-marker"
       }
     },
-    descripction: {
+    description: {
       template: textAreaTemplate,
       config: {
-        placeholder: "Descripción",
-        iconType: "material-community",
-        iconName: "map-marker"
+        placeholder: "Descripción"
       }
     }
   }
