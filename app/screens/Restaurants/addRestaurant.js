@@ -106,7 +106,8 @@ export default class AddRestaurant extends Component {
         city,
         address,
         description,
-        image: ""
+        image: "",
+        createdAt: new Date()
       };
       db.collection("restaurants")
         .add(data)
