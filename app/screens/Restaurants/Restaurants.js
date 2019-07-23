@@ -49,10 +49,6 @@ export default class Restaurants extends Component {
     });
   };
 
-  goToScreen = nameScreen => {
-    this.props.navigation.navigate(nameScreen);
-  };
-
   loadRestaurants = async () => {
     const { limitRestaurants } = this.state;
 
@@ -84,7 +80,11 @@ export default class Restaurants extends Component {
       return (
         <ActionButton
           buttonColor="#00a680"
-          onPress={() => this.goToScreen("AddRestaurant")}
+          onPress={() =>
+            this.props.navigation.navigate("AddRestaurant", {
+              loadRestaurants: this.loadRestaurants
+            })
+          }
         />
       );
     }

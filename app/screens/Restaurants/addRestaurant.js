@@ -19,8 +19,10 @@ import {
 const Form = t.form.Form;
 
 export default class AddRestaurant extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    // this.props.navigation.state.params (Contiene todos los parámetros que se pasaron, al llamar a la screen)
 
     this.state = {
       loading: false,
@@ -142,6 +144,8 @@ export default class AddRestaurant extends Component {
                 "¡Restaurant agregado, exitosamente!",
                 1000,
                 () => {
+                  // Ejecuta la función que carga los restaurants, al agregar uno nuevo
+                  this.props.navigation.state.params.loadRestaurants();
                   this.props.navigation.goBack();
                 }
               );
