@@ -75,6 +75,13 @@ export default class AddRestaurant extends Component {
       }
     }
   };
+
+  onChangeForm = formData => {
+    this.setState({
+      formData
+    });
+  };
+
   render() {
     const { imageUriRestaurant } = this.state;
     return (
@@ -88,6 +95,7 @@ export default class AddRestaurant extends Component {
             type={AddRestaurantStruct}
             options={AddRestaurantOptions}
             value={this.state.formData}
+            onChange={values => this.onChangeForm(values)}
           />
         </View>
         <View style={styles.viewIconUploadPhoto}>
