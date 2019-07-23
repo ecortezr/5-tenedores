@@ -5,6 +5,12 @@ import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-easy-toast";
 
+import { uploadImage } from "../../utils/UploadImage";
+import { firebaseApp } from "../../utils/firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
+const db = firebase.firestore(firebaseApp);
+
 import t from "tcomb-form-native";
 import {
   AddRestaurantOptions,
@@ -31,10 +37,7 @@ export default class AddRestaurant extends Component {
   imageRestaurant = image => {
     if (image) {
       return (
-        <Image
-          source={{ uri: imageUriRestaurant }}
-          style={{ width: 500, height: 200 }}
-        />
+        <Image source={{ uri: image }} style={{ width: 500, height: 200 }} />
       );
     } else {
       return (
@@ -82,8 +85,64 @@ export default class AddRestaurant extends Component {
     });
   };
 
-  addRestaurant = () => {
+  addRestaurant = async () => {
     console.log("this.state: ", this.state);
+    const { imageUriRestaurant } = this.state;
+    const { name, city, address, description } = this.state.formData;
+
+    if (!imageUriRestaurant || !name || !city || !address) {
+      this.refs.toast.show(
+        "Los datos deben estar completos, incluyendo la imagen",
+        500
+      );
+    } else {
+      // Sube los datos a Firestore
+      const data = {
+        name,
+        city,
+        address,
+        description,
+        image: ""
+      };
+      db.collection("restaurants")
+        .add(data)
+        .then(async docRef => {
+          const restaurantId = docRef.id;
+          const imageURL = await uploadImage(
+            imageUriRestaurant,
+            restaurantId,
+            "restaurants"
+          ).catch(error => {
+            console.log("Error: ", error);
+            this.refs.toast.show(
+              "No se ha podido cargar la imagen del restaurant. Compruebe su conexión a internet y/o inténtelo más tarde",
+              500
+            );
+
+            return;
+          });
+          db.collection("restaurants")
+            .doc(restaurantId)
+            .update({
+              image: imageURL
+            })
+            .then(() => {
+              this.refs.toast.show("¡Restaurant agregado, exitosamente!", 500);
+            })
+            .catch(error => {
+              this.refs.toast.show(
+                "No fue posible incorporar la imagen al restaurant",
+                500
+              );
+            });
+        })
+        .catch(err => {
+          this.refs.toast.show(
+            "Error agregando el restaurant. Compruebe su conexión a internet y/o inténtelo más tarde",
+            500
+          );
+        });
+    }
   };
 
   render() {
@@ -139,7 +198,7 @@ const styles = StyleSheet.create({
   viewPhoto: {
     alignItems: "center",
     height: 200,
-    marginBottom: 20
+    marginBottom: 10
   },
   viewIconUploadPhoto: {
     flex: 1,
@@ -158,6 +217,6 @@ const styles = StyleSheet.create({
   },
   btnAdd: {
     backgroundColor: "#00a680",
-    margin: 20
+    margin: 10
   }
 });
