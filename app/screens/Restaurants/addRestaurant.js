@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
-import { Icon, Image } from "react-native-elements";
+import { Icon, Image, Button } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-easy-toast";
@@ -82,6 +82,10 @@ export default class AddRestaurant extends Component {
     });
   };
 
+  addRestaurant = () => {
+    console.log("this.state: ", this.state);
+  };
+
   render() {
     const { imageUriRestaurant } = this.state;
     return (
@@ -105,6 +109,13 @@ export default class AddRestaurant extends Component {
             color="#7a7a7a"
             iconStyle={styles.addPhotoIcon}
             onPress={() => this.uploadImage()}
+          />
+        </View>
+        <View style={styles.viewBtnAdd}>
+          <Button
+            title="Agregar Restaurant"
+            onPress={() => this.addRestaurant()}
+            buttonStyle={styles.btnAdd}
           />
         </View>
         <Toast
@@ -140,5 +151,13 @@ const styles = StyleSheet.create({
     padding: 17,
     paddingBottom: 14,
     margin: 0
+  },
+  viewBtnAdd: {
+    flex: 1,
+    justifyContent: "flex-end"
+  },
+  btnAdd: {
+    backgroundColor: "#00a680",
+    margin: 20
   }
 });
