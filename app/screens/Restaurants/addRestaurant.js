@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
-import { Icon, Image, Button } from "react-native-elements";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { Icon, Image, Button, Text, Overlay } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-easy-toast";
@@ -23,6 +23,7 @@ export default class AddRestaurant extends Component {
     super();
 
     this.state = {
+      loading: false,
       imageUriRestaurant: null,
       // Es opcional establecerle valores a cada campo. Puede ser un objeto vacío
       formData: {
@@ -96,6 +97,9 @@ export default class AddRestaurant extends Component {
         500
       );
     } else {
+      this.setState({
+        loading: true
+      });
       // Sube los datos a Firestore
       const data = {
         name,
@@ -114,6 +118,9 @@ export default class AddRestaurant extends Component {
             "restaurants"
           ).catch(error => {
             console.log("Error: ", error);
+            this.setState({
+              loading: false
+            });
             this.refs.toast.show(
               "No se ha podido cargar la imagen del restaurant. Compruebe su conexión a internet y/o inténtelo más tarde",
               500
@@ -127,9 +134,21 @@ export default class AddRestaurant extends Component {
               image: imageURL
             })
             .then(() => {
-              this.refs.toast.show("¡Restaurant agregado, exitosamente!", 500);
+              this.setState({
+                loading: false
+              });
+              this.refs.toast.show(
+                "¡Restaurant agregado, exitosamente!",
+                1000,
+                () => {
+                  this.props.navigation.goBack();
+                }
+              );
             })
             .catch(error => {
+              this.setState({
+                loading: false
+              });
               this.refs.toast.show(
                 "No fue posible incorporar la imagen al restaurant",
                 500
@@ -137,6 +156,9 @@ export default class AddRestaurant extends Component {
             });
         })
         .catch(err => {
+          this.setState({
+            loading: false
+          });
           this.refs.toast.show(
             "Error agregando el restaurant. Compruebe su conexión a internet y/o inténtelo más tarde",
             500
@@ -146,7 +168,7 @@ export default class AddRestaurant extends Component {
   };
 
   render() {
-    const { imageUriRestaurant } = this.state;
+    const { loading, imageUriRestaurant } = this.state;
     return (
       <View style={styles.viewBody}>
         <View style={styles.viewPhoto}>
@@ -177,6 +199,17 @@ export default class AddRestaurant extends Component {
             buttonStyle={styles.btnAdd}
           />
         </View>
+        <Overlay
+          style={styles.overlayLoading}
+          isVisible={loading}
+          width="auto"
+          height="auto"
+        >
+          <View>
+            <Text style={styles.overlayLoadingText}>Creando restaurant...</Text>
+            <ActivityIndicator size="large" color="#00a680" />
+          </View>
+        </Overlay>
         <Toast
           ref="toast"
           position="bottom"
@@ -218,5 +251,13 @@ const styles = StyleSheet.create({
   btnAdd: {
     backgroundColor: "#00a680",
     margin: 10
+  },
+  overlayLoading: {
+    padding: 30
+  },
+  overlayLoadingText: {
+    color: "#00a680",
+    marginBottom: 20,
+    fontSize: 20
   }
 });
