@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import t from "tcomb-form-native";
 import inputTemplate from "./templates/Input";
+import textAreaTemplate from "./templates/TextArea";
 
 export const AddRestaurantStruct = t.struct({
   name: t.String,
@@ -35,6 +36,13 @@ export const AddRestaurantOptions = {
         iconName: "map-marker"
       }
     },
-    descripction: {}
+    descripction: {
+      template: textAreaTemplate,
+      config: {
+        placeholder: "Descripción",
+        iconType: "material-community",
+        iconName: "map-marker"
+      }
+    }
   }
 };
