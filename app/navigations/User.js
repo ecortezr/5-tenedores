@@ -17,17 +17,17 @@ import LoginScreen from "../screens/MyAccount/Login"
 
 // Screens
 import RestaurantsScreen from "../screens/Restaurants/Restaurants"
-import addRestaurantScreen from "../screens/Restaurants/AddRestaurant"
+import AddRestaurantScreen from "../screens/Restaurants/AddRestaurant"
 
 const restaurantsScreenStack = createStackNavigator({
-  Restauraurants: {
+  Restaurants: {
     screen: RestaurantsScreen,
     navigationOptions: ({ navigation }) => ({
       title: "Home"
     })
   },
-  AddRestauraurant: {
-    screen: addRestaurantScreen,
+  AddRestaurant: {
+    screen: AddRestaurantScreen,
     navigationOptions: ({ navigation }) => ({
       title: "Agregar Restaurant"
     })
