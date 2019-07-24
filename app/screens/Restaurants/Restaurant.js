@@ -2,9 +2,67 @@ import React, { Component } from "react"
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
 import { Image, Icon, ListItem, Button } from "react-native-elements"
 
+// import { firebaseApp } from "../../utils/firebase"
+import firebase from "firebase"
+// import "firebase/firestore"
+// const db = firebase.firestore(firebaseApp)
+
 export default class Restaurant extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      login: false
+    }
+  }
+
+  componentDidMount() {
+    this.checkLogin()
+  }
+
+  checkLogin = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          login: true
+        })
+      } else {
+        this.setState({
+          login: false
+        })
+      }
+    })
+  }
+
+  loadReviewButton = () => {
+    const { login } = this.state
+    if (login) {
+      const { id, name } = this.props.navigation.state.params.restaurant.item
+      return (
+        <Button
+          title="Agregar Valoración"
+          buttonStyle={styles.btnAddReview}
+          onPress={() =>
+            this.props.navigation.navigate("AddReviewRestaurant", {
+              name,
+              id
+            })
+          }
+        />
+      )
+    } else {
+      return (
+        <Text>
+          Para realizar una valoración, debes{" "}
+          <Text
+            style={styles.loginText}
+            onPress={() => this.props.navigation.navigate("Login")}
+          >
+            Iniciar Sesión
+          </Text>
+        </Text>
+      )
+    }
   }
 
   render() {
@@ -52,18 +110,7 @@ export default class Restaurant extends Component {
             />
           ))}
         </View>
-        <View style={styles.viewBtnReview}>
-          <Button
-            title="Agregar Valoración"
-            buttonStyle={styles.btnAddReview}
-            onPress={() =>
-              this.props.navigation.navigate("AddReviewRestaurant", {
-                name,
-                id
-              })
-            }
-          />
-        </View>
+        <View style={styles.viewBtnReview}>{this.loadReviewButton()}</View>
       </View>
     )
   }
@@ -106,5 +153,9 @@ const styles = StyleSheet.create({
   },
   btnAddReview: {
     backgroundColor: "#00a680"
+  },
+  loginText: {
+    color: "#00a680",
+    fontWeight: "bold"
   }
 })
