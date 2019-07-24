@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { StyleSheet, View, Text } from "react-native"
 import { AirbnbRating, Button } from "react-native-elements"
+import Toast from "react-native-easy-toast"
 
 import t from "tcomb-form-native"
 const Form = t.form.Form
@@ -19,6 +20,23 @@ export default class AddReviewRestaurant extends Component {
   addReview = () => {
     const ratingValue = this.refs.rating.state.position
     console.log("Agregando valoración de: ", ratingValue)
+    if (ratingValue === 0) {
+      this.refs.toast.show(
+        "Seleccione la cantidad de estrellas que mejor representan su valoración",
+        1500
+      )
+    } else {
+      // Estableció un rating. Se valida el formulario
+      const validate = this.refs.addReviewForm.getValue()
+      if (!validate) {
+        this.refs.toast.show(
+          "Completa el formulario, para que sea válida tu valoración",
+          1500
+        )
+      } else {
+        // Validación correcta
+      }
+    }
   }
 
   render() {
@@ -54,6 +72,15 @@ export default class AddReviewRestaurant extends Component {
             buttonStyle={styles.btnAdd}
           />
         </View>
+        <Toast
+          ref="toast"
+          position="bottom"
+          positionValue={350}
+          fadeInDuration={1000}
+          fadeOutDuration={1000}
+          opacity={0.8}
+          textStyle={{ color: "#fff" }}
+        />
       </View>
     )
   }
