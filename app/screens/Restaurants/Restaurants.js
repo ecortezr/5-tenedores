@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import {
   StyleSheet,
   View,
@@ -6,20 +6,20 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity
-} from "react-native";
-import { Image } from "react-native-elements";
-import Toast from "react-native-easy-toast";
-import ActionButton from "react-native-action-button";
+} from "react-native"
+import { Image } from "react-native-elements"
+import Toast from "react-native-easy-toast"
+import ActionButton from "react-native-action-button"
 
-import { firebaseApp } from "../../utils/firebase";
-import firebase from "firebase/app";
-import "firebase/firestore";
+import { firebaseApp } from "../../utils/firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
 
-const db = firebase.firestore(firebaseApp);
+const db = firebase.firestore(firebaseApp)
 
 export default class Restaurants extends Component {
   constructor() {
-    super();
+    super()
 
     this.state = {
       isLoading: true,
@@ -27,12 +27,12 @@ export default class Restaurants extends Component {
       restaurants: null,
       startRestaurants: 0,
       limitRestaurants: 5
-    };
+    }
   }
 
   componentDidMount() {
-    this.checkLogin();
-    this.loadRestaurants();
+    this.checkLogin()
+    this.loadRestaurants()
   }
 
   checkLogin = () => {
@@ -40,42 +40,42 @@ export default class Restaurants extends Component {
       if (user) {
         this.setState({
           login: true
-        });
+        })
       } else {
         this.setState({
           login: false
-        });
+        })
       }
-    });
-  };
+    })
+  }
 
   loadRestaurants = async () => {
-    const { limitRestaurants } = this.state;
+    const { limitRestaurants } = this.state
 
-    const resultRestaurants = [];
+    const resultRestaurants = []
     const restaurantsRef = db
       .collection("restaurants")
       .orderBy("createdAt", "desc")
-      .limit(limitRestaurants);
+      .limit(limitRestaurants)
     await restaurantsRef.get().then(snapshot => {
       this.setState({
         startRestaurants: snapshot.docs[snapshot.docs.length - 1]
-      });
+      })
 
       snapshot.forEach(doc => {
         resultRestaurants.push({
           id: doc.id,
           ...doc.data()
-        });
-      });
-    });
+        })
+      })
+    })
     this.setState({
       restaurants: resultRestaurants
-    });
-  };
+    })
+  }
 
   loadActionButton = () => {
-    const { login } = this.state;
+    const { login } = this.state
     if (login) {
       return (
         <ActionButton
@@ -86,73 +86,73 @@ export default class Restaurants extends Component {
             })
           }
         />
-      );
+      )
     }
-  };
+  }
 
   restaurantDetails = restaurant => {
     this.props.navigation.navigate("Restaurant", {
       restaurant
-    });
-  };
+    })
+  }
 
   handleLoadMore = async () => {
-    console.log("Cargando más...");
-    const { restaurants, limitRestaurants, startRestaurants } = this.state;
-    let resultRestaurants = [...restaurants];
-    console.log("resultRestaurants: ", resultRestaurants);
+    console.log("Cargando más...")
+    const { restaurants, limitRestaurants, startRestaurants } = this.state
+    let resultRestaurants = [...restaurants]
+    console.log("resultRestaurants: ", resultRestaurants)
     const restaurantsRef = db
       .collection("restaurants")
       .orderBy("createdAt", "desc")
       .startAfter(startRestaurants.data().createdAt)
-      .limit(limitRestaurants);
+      .limit(limitRestaurants)
     await restaurantsRef
       .get()
       .then(snapshot => {
-        console.log("snapshot.size: ", snapshot.size);
+        console.log("snapshot.size: ", snapshot.size)
         if (snapshot.size > 0) {
           snapshot.forEach(doc => {
             resultRestaurants.push({
               id: doc.id,
               ...doc.data()
-            });
-          });
+            })
+          })
           this.setState({
             startRestaurants: snapshot.docs[snapshot.docs.length - 1],
             restaurants: resultRestaurants
-          });
+          })
         } else {
           this.setState({
             isLoading: false
-          });
+          })
         }
-        console.log("this.state.isLoading: ", this.state.isLoading);
+        console.log("this.state.isLoading: ", this.state.isLoading)
       })
       .catch(error => {
-        console.log("Error recargando en el loading infinito: ", error);
+        console.log("Error recargando en el loading infinito: ", error)
         this.refs.toast.show(
           "Error cargando más restaurants. Inténtelo de nuevo",
           1000
-        );
-      });
-  };
+        )
+      })
+  }
 
   renderFooter = isLoading => {
-    console.log("isLoading en renderFooter: ", isLoading);
+    console.log("isLoading en renderFooter: ", isLoading)
     if (isLoading) {
       return (
         <View style={styles.loaderRestaurants}>
           <ActivityIndicator size="large" />
         </View>
-      );
+      )
     } else {
       return (
         <View style={styles.noMoreRestaurants}>
           <Text>¡No quedan restaurantes por cargar!</Text>
         </View>
-      );
+      )
     }
-  };
+  }
 
   renderRow = restaurant => {
     const {
@@ -163,7 +163,7 @@ export default class Restaurants extends Component {
       description,
       image,
       createdAt
-    } = restaurant.item;
+    } = restaurant.item
     return (
       <TouchableOpacity onPress={() => this.restaurantDetails(restaurant)}>
         <View style={styles.viewRestaurant}>
@@ -185,34 +185,34 @@ export default class Restaurants extends Component {
           </View>
         </View>
       </TouchableOpacity>
-    );
-  };
+    )
+  }
 
   renderFlatList = restaurants => {
     if (restaurants) {
-      const { isLoading } = this.state;
+      const { isLoading } = this.state
       return (
         <FlatList
-          keyExtractor={(iten, index) => index.toString()}
+          keyExtractor={(item, index) => index.toString()}
           data={restaurants}
           renderItem={this.renderRow}
           onEndReached={this.handleLoadMore}
-          // onEndReachedThreshold={0}
+          onEndReachedThreshold={0}
           ListFooterComponent={() => this.renderFooter(isLoading)}
         />
-      );
+      )
     } else {
       return (
         <View style={styles.loadingRestaurants}>
           <ActivityIndicator size="large" />
           <Text>Cargando restaurants...</Text>
         </View>
-      );
+      )
     }
-  };
+  }
 
   render() {
-    const { restaurants } = this.state;
+    const { restaurants } = this.state
     return (
       <View style={styles.viewBody}>
         {this.renderFlatList(restaurants)}
@@ -227,7 +227,7 @@ export default class Restaurants extends Component {
           textStyle={{ color: "#fff" }}
         />
       </View>
-    );
+    )
   }
 }
 
@@ -269,4 +269,4 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: "center"
   }
-});
+})
