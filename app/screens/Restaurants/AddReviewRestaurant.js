@@ -23,6 +23,7 @@ export default class AddReviewRestaurant extends Component {
 
   addReview = async () => {
     const ratingValue = this.refs.rating.state.position
+    const user = await firebase.auth().currentUser
     console.log("Agregando valoración de: ", ratingValue)
     if (ratingValue === 0) {
       this.refs.toast.show(
@@ -47,6 +48,7 @@ export default class AddReviewRestaurant extends Component {
         const { title, review } = validate
         const data = {
           uid,
+          avatarUser: user.photoURL,
           restaurantId,
           title,
           review,

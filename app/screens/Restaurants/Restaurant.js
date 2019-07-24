@@ -131,6 +131,10 @@ export default class Restaurant extends Component {
             reviews: resultReviews,
             startReview: querySnapshot.docs[querySnapshot.size - 1].data()
           })
+        } else {
+          this.setState({
+            reviews: []
+          })
         }
       })
       .catch(error => {
@@ -143,14 +147,25 @@ export default class Restaurant extends Component {
 
   renderRow = reviewItem => {
     console.log("reviewItem.item", reviewItem.item)
-    const { title, review, rating, uid, createdAt } = reviewItem.item
+    const {
+      title,
+      review,
+      rating,
+      uid,
+      avatarUser,
+      createdAt
+    } = reviewItem.item
     const reviewDate = new Date(createdAt.seconds * 1000)
+    console.log("avatarUser: ", avatarUser)
+    const avatar =
+      avatarUser || "https://api.adorable.io/avatars/285/abott@adorable.png"
+    console.log("avatar: ", avatar)
     return (
       <View style={styles.viewReview}>
         <View style={styles.viewReviewImage}>
           <Avatar
             source={{
-              uri: "https://api.adorable.io/avatars/285/abott@adorable.png"
+              uri: avatar
             }}
             size="large"
             rounded
@@ -173,20 +188,28 @@ export default class Restaurant extends Component {
 
   renderFlatList = reviews => {
     if (reviews) {
-      const { isLoading } = this.state
-      return (
-        <View>
-          <Text style={styles.reviewsTitle}>Valoraciones</Text>
-          <FlatList
-            keyExtractor={(item, index) => index.toString()}
-            data={reviews}
-            renderItem={this.renderRow}
-            onEndReachedThreshold={0}
-            // onEndReached={this.handleLoadMore}
-            // ListFooterComponent={() => this.renderFooter(isLoading)}
-          />
-        </View>
-      )
+      if (reviews.length === 0) {
+        return (
+          <View style={styles.loadingReviews}>
+            <Text>No hay valoraciones para este restaurant</Text>
+          </View>
+        )
+      } else {
+        const { isLoading } = this.state
+        return (
+          <View>
+            <Text style={styles.reviewsTitle}>Valoraciones</Text>
+            <FlatList
+              keyExtractor={(item, index) => index.toString()}
+              data={reviews}
+              renderItem={this.renderRow}
+              onEndReachedThreshold={0}
+              // onEndReached={this.handleLoadMore}
+              // ListFooterComponent={() => this.renderFooter(isLoading)}
+            />
+          </View>
+        )
+      }
     } else {
       return (
         <View style={styles.loadingReviews}>
