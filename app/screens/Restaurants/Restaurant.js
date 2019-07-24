@@ -31,8 +31,6 @@ export default class Restaurant extends Component {
       login: false,
       userReview: null,
       reviews: null,
-      startReview: null,
-      limitReviews: 5,
       isLoading: true
     }
   }
@@ -118,7 +116,7 @@ export default class Restaurant extends Component {
   }
 
   loadReviews = async () => {
-    const { limitReviews, restaurantId } = this.state
+    const { restaurantId } = this.state
     let resultReviews = []
     await db
       .collection("reviews")
@@ -140,7 +138,7 @@ export default class Restaurant extends Component {
       .catch(error => {
         this.refs.toast.show(
           "Error cargando las valoraciones del restaurant. Compruebe su conexión a internet y/o inténtelo más tarde",
-          500
+          1500
         )
       })
   }
