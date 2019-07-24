@@ -69,7 +69,8 @@ export default class Restaurant extends Component {
             onPress={() =>
               this.props.navigation.navigate("AddReviewRestaurant", {
                 name,
-                id
+                id,
+                loadReviews: this.loadReviews
               })
             }
           />
@@ -173,7 +174,7 @@ export default class Restaurant extends Component {
         <View style={styles.viewReviewInfo}>
           <Text style={styles.reviewTitle}>{title}</Text>
           <Text style={styles.reviewDetails}>{review}</Text>
-          <Rating imageSize={15} startingValue={rating} />
+          <Rating readonly imageSize={15} startingValue={rating} />
           <Text style={styles.reviewDate}>
             {reviewDate.getDate()}/{reviewDate.getMonth() + 1}/
             {reviewDate.getFullYear()} - {reviewDate.getHours()}:
@@ -218,6 +219,19 @@ export default class Restaurant extends Component {
     }
   }
 
+  getMediaRating = () => {
+    const { reviews } = this.state
+    if (!reviews || reviews.length === 0) {
+      return 0
+    } else {
+      return parseFloat(
+        (
+          this.state.reviews.reduce((a, b) => a + b.rating, 0) / reviews.length
+        ).toFixed(2)
+      )
+    }
+  }
+
   render() {
     const {
       id,
@@ -248,7 +262,15 @@ export default class Restaurant extends Component {
         </View>
 
         <View style={styles.viewBasicInfo}>
-          <Text style={styles.restaurantName}>{name}</Text>
+          <View style={styles.viewTitleRating}>
+            <Text style={styles.restaurantName}>{name}</Text>
+            <Rating
+              imageSize={20}
+              readonly
+              // style={{ position: 'absolute', right: 0 }} También serviría para posicionarlo a la derecha
+              startingValue={this.getMediaRating()}
+            />
+          </View>
           <Text style={styles.restaurantDescription}>{description}</Text>
         </View>
 
@@ -364,5 +386,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 15,
     fontWeight: "bold"
+  },
+  viewTitleRating: {
+    flexDirection: "row",
+    justifyContent: "space-between"
   }
 })

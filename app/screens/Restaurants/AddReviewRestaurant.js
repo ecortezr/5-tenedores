@@ -63,6 +63,7 @@ export default class AddReviewRestaurant extends Component {
               "Valoración enviada! Gracias por su valiosa opinión",
               500,
               () => {
+                this.props.navigation.state.params.loadReviews()
                 this.props.navigation.goBack()
               }
             )
