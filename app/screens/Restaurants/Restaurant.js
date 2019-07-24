@@ -1,56 +1,71 @@
 import React, { Component } from "react"
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
 import { Image, Icon, ListItem, Button } from "react-native-elements"
+import Toast from "react-native-easy-toast"
 
-// import { firebaseApp } from "../../utils/firebase"
-import firebase from "firebase"
-// import "firebase/firestore"
-// const db = firebase.firestore(firebaseApp)
+import { firebaseApp } from "../../utils/firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
+const db = firebase.firestore(firebaseApp)
 
 export default class Restaurant extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      login: false
+      restaurantId: this.props.navigation.state.params.restaurant.item.id,
+      login: false,
+      userReview: null
     }
   }
 
   componentDidMount() {
     // Dispara la ejecución al iniciar. Se queda escuchando cambios en la autenticación
     this.checkLogin()
+    this.checkAddReview()
   }
 
   checkLogin = () => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
-          login: true
+          login: true,
+          uid: user.uid
         })
       } else {
         this.setState({
-          login: false
+          login: false,
+          uid: null
         })
       }
     })
   }
 
   loadReviewButton = () => {
-    const { login } = this.state
+    const { login, userReview } = this.state
     if (login) {
-      const { id, name } = this.props.navigation.state.params.restaurant.item
-      return (
-        <Button
-          title="Agregar Valoración"
-          buttonStyle={styles.btnAddReview}
-          onPress={() =>
-            this.props.navigation.navigate("AddReviewRestaurant", {
-              name,
-              id
-            })
-          }
-        />
-      )
+      if (userReview) {
+        /**
+         * Con la información de userReview se pudiese mostrar la revisión que hizo el usuario,
+         * en su momento e inclusive, darle la oportunidad de editarla o eliminarla
+         */
+        console.log("userReview: ", userReview)
+        return <Text>Ya has emitido una valoración para este restaurant</Text>
+      } else {
+        const { id, name } = this.props.navigation.state.params.restaurant.item
+        return (
+          <Button
+            title="Agregar Valoración"
+            buttonStyle={styles.btnAddReview}
+            onPress={() =>
+              this.props.navigation.navigate("AddReviewRestaurant", {
+                name,
+                id
+              })
+            }
+          />
+        )
+      }
     } else {
       return (
         <Text>
@@ -64,6 +79,40 @@ export default class Restaurant extends Component {
         </Text>
       )
     }
+  }
+
+  /* goToScreenAddReview = () => {
+    this.checkAddReview().then(result => {
+      doReview = result
+    })
+  } */
+
+  checkAddReview = async () => {
+    const { restaurantId } = this.state
+    const uid = await firebase.auth().currentUser.uid
+    console.log("uid y restaurantId: ", uid, restaurantId)
+
+    let result = false
+    db.collection("reviews")
+      .where("uid", "==", uid)
+      .where("restaurantId", "==", restaurantId)
+      .get()
+      .then(querySnapshot => {
+        console.log("querySnapshot.size > 0", querySnapshot.size > 0)
+        this.setState({
+          userReview:
+            querySnapshot.size > 0 ? querySnapshot.docs[0].data() : null
+        })
+        // result = querySnapshot.size > 0
+      })
+      .catch(error => {
+        this.refs.toast.show(
+          "Error comprobando las valoraciones del restaurant. Compruebe su conexión a internet y/o inténtelo más tarde",
+          500
+        )
+      })
+    /* console.log("result: ", result)
+    return result */
   }
 
   render() {
@@ -112,6 +161,15 @@ export default class Restaurant extends Component {
           ))}
         </View>
         <View style={styles.viewBtnReview}>{this.loadReviewButton()}</View>
+        <Toast
+          ref="toast"
+          position="bottom"
+          positionValue={350}
+          fadeInDuration={1000}
+          fadeOutDuration={1000}
+          opacity={0.8}
+          textStyle={{ color: "#fff" }}
+        />
       </View>
     )
   }
