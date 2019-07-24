@@ -1,23 +1,27 @@
 import React, { Component } from "react"
-import { StyleSheet, View, Text } from "react-native"
-import { AirbnbRating, Button } from "react-native-elements"
+import { StyleSheet, View, ActivityIndicator } from "react-native"
+import { AirbnbRating, Button, Text, Overlay } from "react-native-elements"
 import Toast from "react-native-easy-toast"
 
 import t from "tcomb-form-native"
 const Form = t.form.Form
 import { AddReviewStruct, AddReviewOptions } from "../../forms/AddReviewForm"
 
+import { firebaseApp } from "../../utils/firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
+const db = firebase.firestore(firebaseApp)
+
 export default class AddReviewRestaurant extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      review: 0,
-      formData: {}
+      loading: false
     }
   }
 
-  addReview = () => {
+  addReview = async () => {
     const ratingValue = this.refs.rating.state.position
     console.log("Agregando valoración de: ", ratingValue)
     if (ratingValue === 0) {
@@ -34,13 +38,51 @@ export default class AddReviewRestaurant extends Component {
           1500
         )
       } else {
-        // Validación correcta
+        // Enviar data a firestore
+        this.setState({
+          loading: true
+        })
+        const { uid } = await firebase.auth().currentUser
+        const restaurantId = this.props.navigation.state.params.id
+        const { title, review } = validate
+        const data = {
+          uid,
+          restaurantId,
+          title,
+          review,
+          rating: ratingValue,
+          createdAt: new Date()
+        }
+
+        db.collection("reviews")
+          .add(data)
+          .then(docRef => {
+            this.refs.toast.show(
+              "Valoración enviada! Gracias por su valiosa opinión",
+              500,
+              () => {
+                this.props.navigation.goBack()
+              }
+            )
+          })
+          .catch(error => {
+            this.refs.toast.show(
+              "Ocurrió un error, enviando su valoración. Por favor, inténtelo de nuevo",
+              1500
+            )
+          })
+          .then(() => {
+            this.setState({
+              loading: false
+            })
+          })
       }
     }
   }
 
   render() {
     const { id, name } = this.props.navigation.state.params
+    const { loading } = this.state
     return (
       <View style={styles.viewBody}>
         <View style={styles.viewRating}>
@@ -72,6 +114,19 @@ export default class AddReviewRestaurant extends Component {
             buttonStyle={styles.btnAdd}
           />
         </View>
+        <Overlay
+          overlayStyle={styles.overlayLoading}
+          isVisible={loading}
+          width="auto"
+          height="auto"
+        >
+          <View>
+            <Text style={styles.overlayLoadingText}>
+              Enviando valoración...
+            </Text>
+            <ActivityIndicator size="large" color="#00a680" />
+          </View>
+        </Overlay>
         <Toast
           ref="toast"
           position="bottom"
@@ -106,5 +161,13 @@ const styles = StyleSheet.create({
   },
   btnAdd: {
     backgroundColor: "#00a680"
+  },
+  overlayLoading: {
+    padding: 20
+  },
+  overlayLoadingText: {
+    color: "#00a680",
+    marginBottom: 20,
+    fontSize: 20
   }
 })
