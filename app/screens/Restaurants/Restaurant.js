@@ -1,21 +1,22 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { Image, Icon, ListItem } from "react-native-elements";
+import React, { Component } from "react"
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
+import { Image, Icon, ListItem, Button } from "react-native-elements"
 
 export default class Restaurant extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {
     const {
+      id,
       name,
       city,
       address,
       description,
       image,
       createdAt
-    } = this.props.navigation.state.params.restaurant.item;
+    } = this.props.navigation.state.params.restaurant.item
     const listExtraInfo = [
       {
         text: `${city}, ${address}`,
@@ -23,7 +24,7 @@ export default class Restaurant extends Component {
         iconType: "material-community",
         action: null
       }
-    ];
+    ]
     return (
       <View style={styles.viewBody}>
         <View style={styles.viewImage}>
@@ -51,8 +52,20 @@ export default class Restaurant extends Component {
             />
           ))}
         </View>
+        <View style={styles.viewBtnReview}>
+          <Button
+            title="Agregar Valoración"
+            buttonStyle={styles.btnAddReview}
+            onPress={() =>
+              this.props.navigation.navigate("AddReviewRestaurant", {
+                name,
+                id
+              })
+            }
+          />
+        </View>
       </View>
-    );
+    )
   }
 }
 
@@ -87,5 +100,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10
+  },
+  viewBtnReview: {
+    margin: 20
+  },
+  btnAddReview: {
+    backgroundColor: "#00a680"
   }
-});
+})
