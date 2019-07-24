@@ -17,6 +17,7 @@ export default class Restaurant extends Component {
   }
 
   componentDidMount() {
+    // Dispara la ejecución al iniciar. Se queda escuchando cambios en la autenticación
     this.checkLogin()
   }
 
