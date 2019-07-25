@@ -130,25 +130,30 @@ export default class Top5 extends Component {
       return (
         <View>
           {restaurants.map((restaurant, idx) => (
-            <Card key={idx}>
-              <Image
-                resizeMode="cover"
-                source={{ uri: restaurant.image }}
-                style={styles.imageRestaurant}
-              />
-              <View style={styles.viewTitleRating}>
-                <Text style={styles.restaurantName}>{restaurant.name}</Text>
-                <Rating
-                  imageSize={20}
-                  readonly
-                  // style={{ position: 'absolute', right: 0 }} También serviría para posicionarlo a la derecha
-                  startingValue={restaurant.ratingAvg}
+            <TouchableOpacity
+              key={idx}
+              onPress={() => this.restaurantDetails({ item: restaurant })}
+            >
+              <Card>
+                <Image
+                  resizeMode="cover"
+                  source={{ uri: restaurant.image }}
+                  style={styles.imageRestaurant}
                 />
-              </View>
-              <Text style={styles.restaurantDescription}>
-                {restaurant.description}
-              </Text>
-            </Card>
+                <View style={styles.viewTitleRating}>
+                  <Text style={styles.restaurantName}>{restaurant.name}</Text>
+                  <Rating
+                    imageSize={20}
+                    readonly
+                    // style={{ position: 'absolute', right: 0 }} También serviría para posicionarlo a la derecha
+                    startingValue={restaurant.ratingAvg}
+                  />
+                </View>
+                <Text style={styles.restaurantDescription}>
+                  {restaurant.description}
+                </Text>
+              </Card>
+            </TouchableOpacity>
           ))}
         </View>
       )
