@@ -2,12 +2,11 @@ import React, { Component } from "react"
 import {
   StyleSheet,
   View,
-  Text,
   FlatList,
   ActivityIndicator,
   TouchableOpacity
 } from "react-native"
-import { Image } from "react-native-elements"
+import { Text, Image, Rating } from "react-native-elements"
 import Toast from "react-native-easy-toast"
 import ActionButton from "react-native-action-button"
 
@@ -162,6 +161,7 @@ export default class Restaurants extends Component {
       address,
       description,
       image,
+      ratingAvg,
       createdAt
     } = restaurant.item
     return (
@@ -175,7 +175,15 @@ export default class Restaurants extends Component {
             />
           </View>
           <View>
-            <Text style={styles.restaurantName}>{name}</Text>
+            <View style={styles.viewTitleRating}>
+              <Text style={styles.restaurantName}>{name}</Text>
+              <Rating
+                imageSize={15}
+                readonly
+                // style={{ position: 'absolute', right: 0 }} También serviría para posicionarlo a la derecha
+                startingValue={ratingAvg}
+              />
+            </View>
             <Text style={styles.restaurantLocation}>
               {city}, {address}
             </Text>
@@ -268,5 +276,9 @@ const styles = StyleSheet.create({
   noMoreRestaurants: {
     marginVertical: 10,
     alignItems: "center"
+  },
+  viewTitleRating: {
+    flexDirection: "row",
+    justifyContent: "space-between"
   }
 })

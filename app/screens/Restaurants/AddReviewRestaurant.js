@@ -60,13 +60,13 @@ export default class AddReviewRestaurant extends Component {
           .add(data)
           .then(docRef => {
             const restaurantRef = db.collection("restaurants").doc(restaurantId)
-            restaurantRef.get().then(docRef => {
-              let { ratingTotal, votesTotal } = docRef.data()
+            restaurantRef.get().then(anotherRef => {
+              let { ratingTotal, votesTotal } = anotherRef.data()
               ratingTotal += ratingValue
               votesTotal++
 
               const ratingAvg = ratingTotal / votesTotal
-              docRef
+              restaurantRef
                 .update({
                   ratingTotal,
                   votesTotal,

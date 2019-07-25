@@ -138,6 +138,7 @@ export default class Restaurant extends Component {
         }
       })
       .catch(error => {
+        console.log("Error cargando los reviews. Error: ", error)
         this.refs.toast.show(
           "Error cargando las valoraciones del restaurant. Compruebe su conexión a internet y/o inténtelo más tarde",
           1500
@@ -217,6 +218,10 @@ export default class Restaurant extends Component {
     }
   }
 
+  /**
+   * ES INNECESARIO, DADO A QUE SE IMPLEMENTÓ UNA RUTINA (MUY MALA, DEBIDO A QUE DEBIÓ HABER SIDO UNA TRANSACCIÓN)
+   * PARA MANTENER LA MEDIA EN FIRESTORE
+   */
   getMediaRating = () => {
     const { reviews } = this.state
     if (!reviews || reviews.length === 0) {
