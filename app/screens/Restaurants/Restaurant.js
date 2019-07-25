@@ -122,6 +122,7 @@ export default class Restaurant extends Component {
     await db
       .collection("reviews")
       .where("restaurantId", "==", restaurantId)
+      .orderBy("createdAt", "desc")
       .get()
       .then(querySnapshot => {
         if (querySnapshot.size > 0) {
@@ -145,7 +146,6 @@ export default class Restaurant extends Component {
   }
 
   renderRow = reviewItem => {
-    console.log("reviewItem.item", reviewItem.item)
     const {
       title,
       review,
@@ -155,10 +155,8 @@ export default class Restaurant extends Component {
       createdAt
     } = reviewItem.item
     const reviewDate = new Date(createdAt.seconds * 1000)
-    console.log("avatarUser: ", avatarUser)
     const avatar =
       avatarUser || "https://api.adorable.io/avatars/285/abott@adorable.png"
-    console.log("avatar: ", avatar)
     return (
       <View style={styles.viewReview}>
         <View style={styles.viewReviewImage}>

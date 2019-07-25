@@ -59,14 +59,36 @@ export default class AddReviewRestaurant extends Component {
         db.collection("reviews")
           .add(data)
           .then(docRef => {
-            this.refs.toast.show(
-              "Valoración enviada! Gracias por su valiosa opinión",
-              500,
-              () => {
-                this.props.navigation.state.params.loadReviews()
-                this.props.navigation.goBack()
-              }
-            )
+            const restaurantRef = db.collection("restaurants").doc(restaurantId)
+            restaurantRef.get().then(docRef => {
+              let { ratingTotal, votesTotal } = docRef.data()
+              ratingTotal += ratingValue
+              votesTotal++
+
+              const ratingAvg = ratingTotal / votesTotal
+              docRef
+                .update({
+                  ratingTotal,
+                  votesTotal,
+                  ratingAvg
+                })
+                .then(() => {
+                  this.refs.toast.show(
+                    "Valoración enviada! Gracias por su valiosa opinión",
+                    500,
+                    () => {
+                      this.props.navigation.state.params.loadReviews()
+                      this.props.navigation.goBack()
+                    }
+                  )
+                })
+                .catch(error => {
+                  this.refs.toast.show(
+                    "Ocurrió un error, enviando su valoración. Por favor, inténtelo de nuevo",
+                    1500
+                  )
+                })
+            })
           })
           .catch(error => {
             this.refs.toast.show(

@@ -106,6 +106,9 @@ export default class AddRestaurant extends Component {
         address,
         description,
         image: "",
+        ratingAvg: 0,
+        ratingTotal: 0,
+        votesTotal: 0,
         createdAt: new Date()
       }
       db.collection("restaurants")
