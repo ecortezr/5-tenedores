@@ -34,6 +34,9 @@ export default class Restaurants extends Component {
     this.loadRestaurants()
   }
 
+  /**
+   * DEBE ESTAR EN LA SCREEN DOND ARRANQUE LA APLICACIÓN, YA QUE SINO, GENERARÁ UN ERROR CON LA AUTENTICACIÓN
+   */
   checkLogin = () => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {

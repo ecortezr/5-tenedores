@@ -1,6 +1,12 @@
 import React, { Component } from "react"
-import { StyleSheet, View, Text } from "react-native"
-import { SearchBar } from "react-native-elements"
+import { StyleSheet, View, ActivityIndicator, ScrollView } from "react-native"
+import {
+  SearchBar,
+  Text,
+  ListItem,
+  Icon,
+  TouchableOpacity
+} from "react-native-elements"
 
 import { firebaseApp } from "../utils/firebase"
 import firebase from "firebase/app"
@@ -40,14 +46,46 @@ export default class Search extends Component {
     this.setState({
       searchResults: results
     })
+  }
 
-    console.log(this.state)
+  restaurantDetails = restaurant => {
+    this.props.navigation.navigate("Restaurant", {
+      restaurant: { item: restaurant }
+    })
+  }
+
+  renderListRestaurants = restaurants => {
+    if (restaurants && restaurants.length > 0) {
+      return (
+        <View style={styles.noSearch}>
+          {restaurants.map((restaurant, idx) => (
+            <ListItem
+              key={idx}
+              title={restaurant.name}
+              leftAvatar={{ source: { uri: restaurant.image } }}
+              rightIcon={
+                <Icon type="material-community" name="chevron-right" />
+              }
+              onPress={() => this.restaurantDetails(restaurant)}
+            />
+          ))}
+        </View>
+      )
+    } else {
+      return (
+        <View style={styles.noSearch}>
+          <Text>
+            Usa la barra de arriba, para buscar tus restaurantes favoritos...
+          </Text>
+        </View>
+      )
+    }
   }
 
   render() {
-    const { search } = this.state
+    const { search, searchResults } = this.state
     return (
-      <View style={styles.viewBody}>
+      <ScrollView style={styles.viewBody}>
         <SearchBar
           placeholder="Buscar restaurants..."
           onChangeText={value => this.searchRestaurants(value)}
@@ -55,7 +93,8 @@ export default class Search extends Component {
           containerStyle={styles.searchBar}
           lightTheme={true}
         />
-      </View>
+        {this.renderListRestaurants(searchResults)}
+      </ScrollView>
     )
   }
 }
@@ -66,5 +105,9 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     marginBottom: 20
+  },
+  noSearch: {
+    textAlign: "center",
+    marginHorizontal: 10
   }
 })
